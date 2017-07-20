@@ -15,7 +15,7 @@ git checkout v0.2.5
 sudo make install
 cd ..
 
-git clone https://github.com/pret/pokecrystal
+git clone https://github.com/ahendrix/pokecrystalplus/mod
 cd pokecrystal
 ```
 
@@ -39,7 +39,7 @@ git checkout v0.2.5
 sudo make install
 cd ..
 
-git clone https://github.com/pret/pokecrystal
+git clone https://github.com/ahendrix/pokecrystalplus/mod
 cd pokecrystal
 ```
 
@@ -63,7 +63,7 @@ In the **Cygwin terminal**:
 
 ```bash
 
-git clone https://github.com/pret/pokecrystal
+git clone https://github.com/ahendrix/pokecrystalplus/mod
 cd pokecrystal
 ```
 
