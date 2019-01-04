@@ -47,4 +47,6 @@ gfx/pokemon/*/bitmask.asm
 gfx/pokemon/*/frames.asm
 !gfx/pokemon/unown/bitmask.asm
 !gfx/pokemon/unown/frames.asm
+gfx/pics/*/bitmask.asm
+gfx/pics/*/frames.asm
 /.vs
