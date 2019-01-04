@@ -13,7 +13,12 @@ CeruleanTradeSpeechHouseGrannyScript:
 	jumptextfaceplayer CeruleanTradeSpeechHouseGrannyText
 
 CeruleanTradeSpeechHouseGrampsScript:
-	jumptextfaceplayer CeruleanTradeSpeechHouseGrampsText
+	faceplayer
+	opentext
+	trade $8
+	waitbutton
+	closetext
+	end
 
 CeruleanTradeSpeechHouseRhydonScript:
 	opentext
@@ -36,10 +41,6 @@ CeruleanTradeSpeechHouseGrannyText:
 	line "happily with #-"
 	cont "MON he got through"
 	cont "trades."
-	done
-
-CeruleanTradeSpeechHouseGrampsText:
-	text "Ah… I'm so happy…"
 	done
 
 CeruleanTradeSpeechHouseRhydonText:

@@ -13,10 +13,12 @@ GoldenrodPokecenter1F_MapScripts:
 GoldenrodPokecenter1FNurseScript:
 	jumpstd pokecenternurse
 
-GoldenrodPokecenter1F_GSBallSceneLeft:
-	writebyte BATTLETOWERACTION_CHECKMOBILEEVENT
-	special BattleTowerAction
-	ifequal MOBILE_EVENT_OBJECT_GS_BALL, .gsball
+GoldenrodPokeCenter1F_GSBallTriggerLeft:
+	;writebyte BATTLETOWERACTION_CHECKMOBILEEVENT
+	;special BattleTowerAction
+	;ifequal MOBILE_EVENT_OBJECT_GS_BALL, .gsball
+	checkevent EVENT_UNLOCK_BONUS_LEGENDARIES
+	iftrue .gsball
 	end
 
 .gsball
@@ -45,10 +47,12 @@ GoldenrodPokecenter1F_GSBallSceneLeft:
 .cancel
 	end
 
-GoldenrodPokecenter1F_GSBallSceneRight:
-	writebyte BATTLETOWERACTION_CHECKMOBILEEVENT
-	special BattleTowerAction
-	ifequal MOBILE_EVENT_OBJECT_GS_BALL, .gsball
+GoldenrodPokeCenter1F_GSBallTriggerRight:
+	;writebyte BATTLETOWERACTION_CHECKMOBILEEVENT
+	;special BattleTowerAction
+	;ifequal MOBILE_EVENT_OBJECT_GS_BALL, .gsball
+	checkevent EVENT_UNLOCK_BONUS_LEGENDARIES
+	iftrue .gsball
 	end
 
 .gsball
@@ -718,18 +722,27 @@ GoldenrodPokecenter1FLassText:
 UnknownText_0x622f0:
 	text "<PLAYER>, isn't it?"
 
-	para "Congratulations!"
+	;para "Congratulations!"
 
-	para "As a special deal,"
-	line "a GS BALL has been"
-	cont "sent just for you!"
+	;para "As a special deal,"
+	;line "a GS BALL has been"
+	;cont "sent just for you!"
 
-	para "Please accept it!"
+	para "RED asked me to  "
+	line "give this to you."
+
+	;para "Please accept it!"
 	done
 
 UnknownText_0x62359:
-	text "Please do come"
-	line "again!"
+	;text "Please do come"
+	;line "again!"
+
+	text "Maybe someone who"
+	line "knows a lot about"
+
+	para "# BALLS can"
+	line "tell you more."
 	done
 
 UnknownText_0x62370:
