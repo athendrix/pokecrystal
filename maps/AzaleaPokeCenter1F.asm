@@ -27,7 +27,12 @@ FishingGuruScript_0x18db2e:
 	jumptextfaceplayer UnknownText_0x18dbee
 
 PokefanFScript_0x18db31:
-	jumptextfaceplayer UnknownText_0x18dc19
+	faceplayer
+	opentext
+	trade $7
+	waitbutton
+	closetext
+	end
 
 UnknownText_0x18db34:
 	text "Do your #MON"
@@ -56,26 +61,6 @@ UnknownText_0x18dbee:
 	text "BILL's PC can"
 	line "store up to 20"
 	cont "#MON per BOX."
-	done
-
-UnknownText_0x18dc19:
-	text "Do you know about"
-	line "APRICORNS?"
-
-	para "Crack one open,"
-	line "hollow it out and"
-
-	para "fit it with a"
-	line "special device."
-
-	para "Then you can catch"
-	line "#MON with it."
-
-	para "Before # BALLS"
-	line "were invented,"
-
-	para "everyone used"
-	line "APRICORNS."
 	done
 
 AzaleaPokeCenter1F_MapEventHeader:

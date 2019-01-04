@@ -1336,11 +1336,11 @@ UnknownText_0x1bd407::
 
 UnknownText_0x1bd429::
 	text "<PLAYER> traded"
-	line "@"
+	line "away @"
 	text_from_ram wMonOrItemNameBuffer
-	text " for"
-	cont "@"
-	text_from_ram StringBuffer2
+	;text " for"
+	;cont "@"
+	;text_from_ram StringBuffer2
 	text ".@@"
 
 UnknownText_0x1bd445::
@@ -1477,13 +1477,7 @@ UnknownText_0x1bd6cd::
 	done
 
 UnknownText_0x1bd6f5::
-	text "How is that"
-	line "@"
-	text_from_ram StringBuffer2
-	text " I"
-	cont "traded you doing?"
-
-	para "Your @"
+	text "Your @"
 	text_from_ram wMonOrItemNameBuffer
 	text "'s"
 	line "so cute!"

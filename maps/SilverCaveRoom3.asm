@@ -33,6 +33,7 @@ Red:
 	pause 30
 	special HealParty
 	refreshscreen $0
+	setevent EVENT_UNLOCK_BONUS_LEGENDARIES
 	credits
 	end
 

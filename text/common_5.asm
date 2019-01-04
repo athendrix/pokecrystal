@@ -206,7 +206,7 @@ UnknownText_0x1c55d6::
 	done
 
 UnknownText_0x1c55db::
-	text "Password OK."
+	text "Clock Reset."
 	line "Select CONTINUE &"
 	cont "reset settings."
 	prompt

@@ -342,7 +342,7 @@ ParkBall: ; e8a2
 	and 1 << FRZ | SLP
 	ld c, 10
 	jr nz, .addstatus
-	; ld a, [EnemyMonStatus]
+	ld a, [EnemyMonStatus];This was the commented line
 	and a
 	ld c, 5
 	jr nz, .addstatus
@@ -367,7 +367,7 @@ ParkBall: ; e8a2
 	; Uncomment the line below to fix.
 
 	ld a, [BattleMonItem]
-;	ld b, a
+	ld b, a ;This was the commented line
 	callba GetItemHeldEffect
 	ld a, b
 	cp HELD_CATCH_CHANCE
@@ -947,7 +947,8 @@ GLOBAL EvosAttacksPointers
 	push bc
 	ld a, BANK(EvosAttacks)
 	call GetFarByte
-	cp MOON_STONE_RED ; BURN_HEAL
+	;cp MOON_STONE_RED ; BURN_HEAL
+	cp MOON_STONE ; This might fix it.
 	pop bc
 	ret nz
 
@@ -1006,7 +1007,7 @@ LoveBallMultiplier:
 	pop de
 	cp d
 	pop bc
-	ret nz ; for the intended effect, this should be “ret z”
+	ret z ; for the intended effect, this should be “ret z” (Fixed)
 
 	sla b
 	jr c, .max
@@ -1044,7 +1045,7 @@ FastBallMultiplier:
 	cp -1
 	jr z, .next
 	cp c
-	jr nz, .next ; for the intended effect, this should be “jr nz, .loop”
+	jr nz, .loop ; for the intended effect, this should be “jr nz, .loop” (Fixed)
 	sla b
 	jr c, .max
 

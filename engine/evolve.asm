@@ -1,22 +1,22 @@
 EvolvePokemon: ; 421d8
-	ld hl, EvolvableFlags
-	xor a
-	ld [hl], a
-	ld a, [CurPartyMon]
-	ld c, a
-	ld b, SET_FLAG
-	call EvoFlagAction
+	ld hl, EvolvableFlags;			Load the EvolvableFlags memory location into memory
+	xor a;							Set a = 0
+	ld [hl], a;						Set the data at the EvolvableFlags memory location to 0
+	ld a, [CurPartyMon];			Load the data from the CurPartyMon memory location into a
+	ld c, a;						Load the data from the CurPartyMon memory location into c
+	ld b, SET_FLAG;					Load the value for SET_FLAG (1) into b
+	call EvoFlagAction;				Set the EvolvableFlag for CurPartyMon
 EvolveAfterBattle: ; 421e6
-	xor a
-	ld [wMonTriedToEvolve], a
-	dec a
-	ld [CurPartyMon], a
-	push hl
-	push bc
-	push de
-	ld hl, PartyCount
+	xor a;							Set a = 0
+	ld [wMonTriedToEvolve], a;		Set the data at the wMonTriedToEvolve memory location to 0
+	dec a;							Set a = -1 (0 - 1)
+	ld [CurPartyMon], a;			Set the data at the CurPartyMon memory location to -1
+	push hl;						Push hl onto the stack (If called from EvolvePokemon, it will be the EvolvableFlags memory location)
+	push bc;						Push bc onto the stack (If called from EvolvePokemon, c will be the data )
+	push de;						Push de onto the stack
+	ld hl, PartyCount;				Load the PartyCount memory location into hl
 
-	push hl
+	push hl;						Push the PartyCount memory location onto the stack
 
 EvolveAfterBattle_MasterLoop
 	ld hl, CurPartyMon

@@ -15,8 +15,8 @@ _ResetClock: ; 4d3b1
 	ld a, [wMenuCursorY]
 	cp $1
 	ret z
-	call ClockResetPassword
-	jr c, .wrongpassword
+	;call ClockResetPassword
+	;jr c, .wrongpassword
 	ld a, BANK(sRTCStatusFlags)
 	call GetSRAMBank
 	ld a, $80
@@ -32,7 +32,7 @@ _ResetClock: ; 4d3b1
 	ret
 
 .text_okay ; 0x4d3fe
-	; Password OK. Select CONTINUE & reset settings.
+	; Clock Reset. Select CONTINUE & reset settings.
 	text_jump UnknownText_0x1c55db
 	db "@"
 

@@ -88,6 +88,21 @@ NPCTrade:: ; fcba8
 	ld [wcf64], a
 	pop af
 	ld [wJumptableIndex], a
+	
+	;Makes newly traded pokemon evolve.
+	push af
+	ld a, [PartyCount]
+	dec a
+	ld [CurPartyMon], a
+	ld a, $1
+	ld [wForceEvolution], a
+	ld a, LINK_TRADECENTER
+	ld [wLinkMode], a
+	callba EvolvePokemon
+	ld a, LINK_NULL
+	ld [wLinkMode], a
+	pop af
+
 	call ReturnToMapWithSpeechTextbox
 	ret
 ; fcc23
@@ -438,13 +453,16 @@ npctrade: MACRO
 ENDM
 
 
-	npctrade 0, ABRA,       MACHOP,     "MUSCLE@@@@@", $37, $66, GOLD_BERRY,   37460, "MIKE@@@@@@@", TRADE_EITHER_GENDER
-	npctrade 0, BELLSPROUT, ONIX,       "ROCKY@@@@@@", $96, $66, BITTER_BERRY, 48926, "KYLE@@@@@@@", TRADE_EITHER_GENDER
-	npctrade 1, KRABBY,     VOLTORB,    "VOLTY@@@@@@", $98, $88, PRZCUREBERRY, 29189, "TIM@@@@@@@@", TRADE_EITHER_GENDER
-	npctrade 3, DRAGONAIR,  DODRIO,     "DORIS@@@@@@", $77, $66, SMOKE_BALL,   00283, "EMY@@@@@@@@", TRADE_FEMALE_ONLY
-	npctrade 2, HAUNTER,    XATU,       "PAUL@@@@@@@", $96, $86, MYSTERYBERRY, 15616, "CHRIS@@@@@@", TRADE_EITHER_GENDER
-	npctrade 3, CHANSEY,    AERODACTYL, "AEROY@@@@@@", $96, $66, GOLD_BERRY,   26491, "KIM@@@@@@@@", TRADE_EITHER_GENDER
-	npctrade 0, DUGTRIO,    MAGNETON,   "MAGGIE@@@@@", $96, $66, METAL_COAT,   50082, "FOREST@@@@@", TRADE_EITHER_GENDER
+	npctrade 2, KADABRA,    MACHOKE,    "MUSCLE@@@@@", $37, $66, GOLD_BERRY,   37460, "MIKE@@@@@@@", TRADE_EITHER_GENDER
+	npctrade 1, WEEPINBELL, ONIX,       "TITAN@@@@@@", $96, $66, METAL_COAT,   48926, "KYLE@@@@@@@", TRADE_EITHER_GENDER
+	npctrade 1, KINGLER,    PORYGON,    "DIGITAL@@@@", $98, $88, UP_GRADE,     29189, "TIM@@@@@@@@", TRADE_EITHER_GENDER
+	npctrade 3, DRAGONAIR,  SEADRA,     "MAELSTROM@@", $77, $66, DRAGON_SCALE, 00283, "EMY@@@@@@@@", TRADE_EITHER_GENDER
+	npctrade 1, XATU,       HAUNTER,    "CARL@@@@@@@", $96, $86, MYSTERYBERRY, 15616, "CHRIS@@@@@@", TRADE_EITHER_GENDER
+	npctrade 3, CHANSEY,    POLIWHIRL,  "FROGGER@@@@", $96, $66, KINGS_ROCK,   26491, "KIM@@@@@@@@", TRADE_EITHER_GENDER
+	npctrade 1, DUGTRIO,    SCYTHER,    "EDWARD@@@@@", $96, $66, METAL_COAT,   50082, "FOREST@@@@@", TRADE_EITHER_GENDER
+	npctrade 1, QUAGSIRE,   SLOWPOKE,   "MIDAS@@@@@@", $96, $66, KINGS_ROCK,   49281, "JANET@@@@@@", TRADE_EITHER_GENDER
+	npctrade 1, RAICHU,     GRAVELER,   "DWAYNE@@@@@", $96, $66, MIRACLEBERRY, 19626, "ABRAHAM@@@@", TRADE_EITHER_GENDER
+	npctrade 1, MISDREAVUS, KADABRA,    "BRAINS@@@@@", $77, $86, GOLD_BERRY,   63947, "SAMUEL@@@@@", TRADE_EITHER_GENDER
 ; fcf38
 
 
@@ -615,6 +633,7 @@ TradeCompleteText4: ; 0xfcfd8
 
 TradeAfterText4: ; 0xfcfdd
 	; How is that @  I traded you doing? Your @ 's so cute!
+	;Your @ 's so cute!
 	text_jump UnknownText_0x1bd6f5
 	db "@"
 ; 0xfcfe2

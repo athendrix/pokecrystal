@@ -15,7 +15,12 @@ GrannyScript_0x188133:
 	jumptextfaceplayer UnknownText_0x18814d
 
 GrampsScript_0x188136:
-	jumptextfaceplayer UnknownText_0x18818a
+	faceplayer
+	opentext
+	trade $8
+	waitbutton
+	closetext
+	end
 
 RhydonScript_0x188139:
 	opentext
@@ -38,10 +43,6 @@ UnknownText_0x18814d:
 	line "happily with #-"
 	cont "MON he got through"
 	cont "trades."
-	done
-
-UnknownText_0x18818a:
-	text "Ah… I'm so happy…"
 	done
 
 UnknownText_0x18819c:

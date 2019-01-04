@@ -16,9 +16,11 @@ NurseScript_0x60f91:
 	jumpstd pokecenternurse
 
 GoldenrodPokeCenter1F_GSBallTriggerLeft:
-	writebyte BATTLETOWERACTION_CHECKMOBILEEVENT
-	special BattleTowerAction
-	if_equal MOBILE_EVENT_OBJECT_GS_BALL, .gsball
+	;writebyte BATTLETOWERACTION_CHECKMOBILEEVENT
+	;special BattleTowerAction
+	;if_equal MOBILE_EVENT_OBJECT_GS_BALL, .gsball
+	checkevent EVENT_UNLOCK_BONUS_LEGENDARIES
+	iftrue .gsball
 	end
 
 .gsball
@@ -48,9 +50,11 @@ GoldenrodPokeCenter1F_GSBallTriggerLeft:
 	end
 
 GoldenrodPokeCenter1F_GSBallTriggerRight:
-	writebyte BATTLETOWERACTION_CHECKMOBILEEVENT
-	special BattleTowerAction
-	if_equal MOBILE_EVENT_OBJECT_GS_BALL, .gsball
+	;writebyte BATTLETOWERACTION_CHECKMOBILEEVENT
+	;special BattleTowerAction
+	;if_equal MOBILE_EVENT_OBJECT_GS_BALL, .gsball
+	checkevent EVENT_UNLOCK_BONUS_LEGENDARIES
+	iftrue .gsball
 	end
 
 .gsball
@@ -720,18 +724,27 @@ UnknownText_0x62260:
 UnknownText_0x622f0:
 	text "<PLAYER>, isn't it?"
 
-	para "Congratulations!"
+	;para "Congratulations!"
 
-	para "As a special deal,"
-	line "a GS BALL has been"
-	cont "sent just for you!"
+	;para "As a special deal,"
+	;line "a GS BALL has been"
+	;cont "sent just for you!"
 
-	para "Please accept it!"
+	para "RED asked me to  "
+	line "give this to you."
+
+	;para "Please accept it!"
 	done
 
 UnknownText_0x62359:
-	text "Please do come"
-	line "again!"
+	;text "Please do come"
+	;line "again!"
+
+	text "Maybe someone who"
+	line "knows a lot about"
+
+	para "# BALLS can"
+	line "tell you more."
 	done
 
 UnknownText_0x62370:

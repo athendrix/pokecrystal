@@ -39,7 +39,12 @@ FisherScript_0x18a48c:
 	end
 
 YoungsterScript_0x18a4a0:
-	jumptextfaceplayer UnknownText_0x18a6c5
+	faceplayer
+	opentext
+	trade $9
+	waitbutton
+	closetext
+	end
 
 UnknownText_0x18a4a3:
 	text "What are JOHTO's"
@@ -98,17 +103,6 @@ UnknownText_0x18a62e:
 	para "As a pro HIKER,"
 	line "that's common"
 	cont "knowledge."
-	done
-
-UnknownText_0x18a6c5:
-	text "SILPH CO.'s HEAD"
-	line "OFFICE and the"
-
-	para "MAGNET TRAIN STA-"
-	line "TION--they're the"
-
-	para "places to see in"
-	line "SAFFRON."
 	done
 
 SaffronPokeCenter1F_MapEventHeader:
