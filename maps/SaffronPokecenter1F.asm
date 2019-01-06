@@ -37,7 +37,12 @@ SaffronPokecenter1FFisherScript:
 	end
 
 SaffronPokecenter1FYoungsterScript:
-	jumptextfaceplayer SaffronPokecenter1FYoungsterText
+	faceplayer
+	opentext
+	trade NPC_TRADE_SAMUEL
+	waitbutton
+	closetext
+	end
 
 SaffronPokecenter1FTeacherText:
 	text "What are JOHTO's"
@@ -96,17 +101,6 @@ SaffronPokecenter1FFisherReturnedMachinePartText:
 	para "As a pro HIKER,"
 	line "that's common"
 	cont "knowledge."
-	done
-
-SaffronPokecenter1FYoungsterText:
-	text "SILPH CO.'s HEAD"
-	line "OFFICE and the"
-
-	para "MAGNET TRAIN STA-"
-	line "TION--they're the"
-
-	para "places to see in"
-	line "SAFFRON."
 	done
 
 SaffronPokecenter1F_MapEvents:

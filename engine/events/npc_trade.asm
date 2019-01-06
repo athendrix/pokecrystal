@@ -63,6 +63,21 @@ NPCTrade::
 	ld [wcf64], a
 	pop af
 	ld [wJumptableIndex], a
+	
+	;Makes newly traded pokemon evolve.
+	push af
+	ld a, [wPartyCount]
+	dec a
+	ld [wCurPartyMon], a
+	ld a, TRUE
+	ld [wForceEvolution], a
+	ld a, LINK_TRADECENTER
+	ld [wLinkMode], a
+	farcall EvolvePokemon
+	ld a, LINK_NULL
+	ld [wLinkMode], a
+	pop af
+
 	call ReturnToMapWithSpeechTextbox
 	ret
 
@@ -525,7 +540,7 @@ TradeCompleteText4:
 	text_end
 
 TradeAfterText4:
-	; How is that @  I traded you doing? Your @ 's so cute!
+	;Your @ 's so cute!
 	text_far UnknownText_0x1bd6f5
 	text_end
 

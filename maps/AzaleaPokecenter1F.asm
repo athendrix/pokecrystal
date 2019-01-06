@@ -23,7 +23,12 @@ AzaleaPokecenter1FFishingGuruScript:
 	jumptextfaceplayer AzaleaPokecenter1FFishingGuruText
 
 AzaleaPokecenter1FPokefanFScript:
-	jumptextfaceplayer AzaleaPokecenter1FPokefanFText
+	faceplayer
+	opentext
+	trade NPC_TRADE_JANET
+	waitbutton
+	closetext
+	end
 
 AzaleaPokecenter1FGentlemanText:
 	text "Do your #MON"
@@ -53,26 +58,6 @@ AzaleaPokecenter1FFishingGuruText:
 	text "BILL's PC can"
 	line "store up to 20"
 	cont "#MON per BOX."
-	done
-
-AzaleaPokecenter1FPokefanFText:
-	text "Do you know about"
-	line "APRICORNS?"
-
-	para "Crack one open,"
-	line "hollow it out and"
-
-	para "fit it with a"
-	line "special device."
-
-	para "Then you can catch"
-	line "#MON with it."
-
-	para "Before # BALLS"
-	line "were invented,"
-
-	para "everyone used"
-	line "APRICORNS."
 	done
 
 AzaleaPokecenter1F_MapEvents:

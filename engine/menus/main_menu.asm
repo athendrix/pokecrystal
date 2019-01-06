@@ -47,6 +47,7 @@ MainMenu:
 	db "MYSTERY GIFT@"
 	db "MOBILE@"
 	db "MOBILE STUDIUM@"
+	db "RESET CLOCK@"
 
 .Jumptable:
 	dw MainMenu_Continue
@@ -55,6 +56,7 @@ MainMenu:
 	dw MainMenu_MysteryGift
 	dw MainMenu_Mobile
 	dw MainMenu_MobileStudium
+	dw MainMenu_ResetClock
 
 CONTINUE       EQU 0
 NEW_GAME       EQU 1
@@ -62,6 +64,7 @@ OPTION         EQU 2
 MYSTERY_GIFT   EQU 3
 MOBILE         EQU 4
 MOBILE_STUDIUM EQU 5
+RESET_CLOCK    EQU 6
 
 MainMenuItems:
 
@@ -72,70 +75,78 @@ NewGameMenu:
 	db -1
 
 ContinueMenu:
-	db 3
+	db 4
 	db CONTINUE
 	db NEW_GAME
 	db OPTION
+	db RESET_CLOCK
 	db -1
 
 MobileMysteryMenu:
-	db 5
+	db 6
 	db CONTINUE
 	db NEW_GAME
 	db OPTION
+	db RESET_CLOCK
 	db MYSTERY_GIFT
 	db MOBILE
 	db -1
 
 MobileMenu:
-	db 4
-	db CONTINUE
-	db NEW_GAME
-	db OPTION
-	db MOBILE
-	db -1
-
-MobileStudiumMenu:
 	db 5
 	db CONTINUE
 	db NEW_GAME
 	db OPTION
+	db RESET_CLOCK
+	db MOBILE
+	db -1
+
+MobileStudiumMenu:
+	db 6
+	db CONTINUE
+	db NEW_GAME
+	db OPTION
+	db RESET_CLOCK
 	db MOBILE
 	db MOBILE_STUDIUM
 	db -1
 
 MysteryMobileStudiumMenu:
-	db 6
+	db 7
 	db CONTINUE
 	db NEW_GAME
 	db OPTION
+	db RESET_CLOCK
 	db MYSTERY_GIFT
 	db MOBILE
 	db MOBILE_STUDIUM
 	db -1
 
 MysteryMenu:
-	db 4
-	db CONTINUE
-	db NEW_GAME
-	db OPTION
-	db MYSTERY_GIFT
-	db -1
-
-MysteryStudiumMenu:
 	db 5
 	db CONTINUE
 	db NEW_GAME
 	db OPTION
+	db RESET_CLOCK
+	db MYSTERY_GIFT
+	db -1
+
+MysteryStudiumMenu:
+	db 6
+	db CONTINUE
+	db NEW_GAME
+	db OPTION
+	db RESET_CLOCK
 	db MYSTERY_GIFT
 	db MOBILE_STUDIUM
 	db -1
 
 StudiumMenu:
-	db 4
+	db 5
 	db CONTINUE
 	db NEW_GAME
 	db OPTION
+	db RESET_CLOCK
 	db MOBILE_STUDIUM
 	db -1
 
@@ -334,4 +345,8 @@ MainMenu_Continue:
 
 MainMenu_MysteryGift:
 	farcall MysteryGift
+	ret
+
+MainMenu_ResetClock:
+	farcall _ResetClock
 	ret
