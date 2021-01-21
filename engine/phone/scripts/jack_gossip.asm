@@ -14,55 +14,55 @@ JackTriviaScript:
 
 .Thunder:
 	farwritetext JackThunderTriviaText
-	buttonsound
-	jump PhoneScript_HangupText_Male
+	promptbutton
+	sjump PhoneScript_HangUpText_Male
 
 .Rollout:
 	farwritetext JackRolloutTriviaText
-	buttonsound
-	jump PhoneScript_HangupText_Male
+	promptbutton
+	sjump PhoneScript_HangUpText_Male
 
 .Solarbeam:
 	farwritetext JackSolarbeamTriviaText
-	buttonsound
-	jump PhoneScript_HangupText_Male
+	promptbutton
+	sjump PhoneScript_HangUpText_Male
 
 .Stomp:
 	farwritetext JackStompTriviaText
-	buttonsound
-	jump PhoneScript_HangupText_Male
+	promptbutton
+	sjump PhoneScript_HangUpText_Male
 
 .Gust:
 	farwritetext JackGustTriviaText
-	buttonsound
-	jump PhoneScript_HangupText_Male
+	promptbutton
+	sjump PhoneScript_HangUpText_Male
 
 .Twister:
 	farwritetext JackTwisterTriviaText
-	buttonsound
-	jump PhoneScript_HangupText_Male
+	promptbutton
+	sjump PhoneScript_HangUpText_Male
 
 .Earthquake:
 	farwritetext JackEarthquakeTriviaText
-	buttonsound
-	jump PhoneScript_HangupText_Male
+	promptbutton
+	sjump PhoneScript_HangUpText_Male
 
 .Magnitude:
 	farwritetext JackMagnitudeTriviaText
-	buttonsound
-	jump PhoneScript_HangupText_Male
+	promptbutton
+	sjump PhoneScript_HangUpText_Male
 
 .Sandstorm:
 	farwritetext JackSandstormTriviaText
-	buttonsound
-	jump PhoneScript_HangupText_Male
+	promptbutton
+	sjump PhoneScript_HangUpText_Male
 
 .SunnyDay:
 	farwritetext JackSunnyDayTriviaText
-	buttonsound
-	jump PhoneScript_HangupText_Male
+	promptbutton
+	sjump PhoneScript_HangUpText_Male
 
 .RainDance:
 	farwritetext JackRainDanceTriviaText
-	buttonsound
-	jump PhoneScript_HangupText_Male
+	promptbutton
+	sjump PhoneScript_HangUpText_Male

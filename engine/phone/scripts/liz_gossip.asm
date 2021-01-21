@@ -1,4 +1,4 @@
-UnknownScript_0xa06da:
+LizGossipRandomScript:
 	random 10
 	ifequal 0, .RuinsOfAlph
 	ifequal 1, .Falkner
@@ -12,51 +12,51 @@ UnknownScript_0xa06da:
 	ifequal 9, .Forgot
 
 .RuinsOfAlph:
-	farwritetext UnknownText_0x176223
-	buttonsound
-	jump PhoneScript_HangupText_Female
+	farwritetext LizRuinsOfAlphGossipText
+	promptbutton
+	sjump PhoneScript_HangUpText_Female
 
 .Falkner:
-	farwritetext UnknownText_0x1762c3
-	buttonsound
-	jump PhoneScript_HangupText_Female
+	farwritetext LizFalknerGossipText
+	promptbutton
+	sjump PhoneScript_HangUpText_Female
 
 .Earl:
-	farwritetext UnknownText_0x17638a
-	buttonsound
-	jump PhoneScript_HangupText_Female
+	farwritetext LizEarlGossipText
+	promptbutton
+	sjump PhoneScript_HangUpText_Female
 
 .SurfPikachu:
-	farwritetext UnknownText_0x176424
-	buttonsound
-	jump PhoneScript_HangupText_Female
+	farwritetext LizSurfPikachuGossipText
+	promptbutton
+	sjump PhoneScript_HangUpText_Female
 
 .MooMooMilk:
-	farwritetext UnknownText_0x1764eb
-	buttonsound
-	jump PhoneScript_HangupText_Female
+	farwritetext LizMooMooMilkGossipText
+	promptbutton
+	sjump PhoneScript_HangUpText_Female
 
 .Salon:
-	farwritetext UnknownText_0x176599
-	buttonsound
-	jump PhoneScript_HangupText_Female
+	farwritetext LizSalonGossipText
+	promptbutton
+	sjump PhoneScript_HangUpText_Female
 
 .Whitney:
-	farwritetext UnknownText_0x1766ac
-	buttonsound
-	jump PhoneScript_HangupText_Female
+	farwritetext LizWhitneyGossipText
+	promptbutton
+	sjump PhoneScript_HangUpText_Female
 
 .BugCatchingContest:
-	farwritetext UnknownText_0x17674f
-	buttonsound
-	jump PhoneScript_HangupText_Female
+	farwritetext LizBugCatchingContestGossipText
+	promptbutton
+	sjump PhoneScript_HangUpText_Female
 
 .BeautifulMon:
-	farwritetext UnknownText_0x176816
-	buttonsound
-	jump PhoneScript_HangupText_Female
+	farwritetext LizBeautifulMonGossipText
+	promptbutton
+	sjump PhoneScript_HangUpText_Female
 
 .Forgot:
-	farwritetext UnknownText_0x17686d
-	buttonsound
-	jump PhoneScript_HangupText_Female
+	farwritetext LizForgotGossipText
+	promptbutton
+	sjump PhoneScript_HangUpText_Female

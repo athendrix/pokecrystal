@@ -2,7 +2,7 @@ MANIA_OT_ID EQU 00518
 
 GiveShuckle:
 ; Adding to the party.
-	xor a
+	xor a ; PARTYMON
 	ld [wMonType], a
 
 ; Level 15 Shuckle.
@@ -15,7 +15,7 @@ GiveShuckle:
 	jr nc, .NotGiven
 
 ; Caught data.
-	ld b, 0
+	ld b, CAUGHT_BY_UNKNOWN
 	farcall SetGiftPartyMonCaughtData
 
 ; Holding a Berry.

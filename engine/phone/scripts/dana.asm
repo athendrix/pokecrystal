@@ -1,32 +1,32 @@
 DanaPhoneCalleeScript:
-	trainertotext LASS, DANA1, MEM_BUFFER_0
-	checkflag ENGINE_DANA
+	gettrainername STRING_BUFFER_3, LASS, DANA1
+	checkflag ENGINE_DANA_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	farscall PhoneScript_AnswerPhone_Female
 	checkflag ENGINE_DANA_THURSDAY_NIGHT
 	iftrue .NotThursday
 	checkflag ENGINE_DANA_HAS_THUNDERSTONE
 	iftrue .HasThunderstone
-	checkcode VAR_WEEKDAY
+	readvar VAR_WEEKDAY
 	ifnotequal THURSDAY, .NotThursday
 	checktime NITE
 	iftrue DanaThursdayNight
 
 .NotThursday:
-	farjump UnknownScript_0xa0978
+	farsjump DanaHangUpScript
 
 .WantsBattle:
-	landmarktotext ROUTE_38, MEM_BUFFER_2
-	farjump UnknownScript_0xa0a78
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_38
+	farsjump DanaReminderScript
 
 .HasThunderstone:
-	landmarktotext ROUTE_38, MEM_BUFFER_2
-	farjump UnknownScript_0xa0acd
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_38
+	farsjump DanaComePickUpScript
 
 DanaPhoneCallerScript:
-	trainertotext LASS, DANA1, MEM_BUFFER_0
+	gettrainername STRING_BUFFER_3, LASS, DANA1
 	farscall PhoneScript_GreetPhone_Female
-	checkflag ENGINE_DANA
+	checkflag ENGINE_DANA_READY_FOR_REMATCH
 	iftrue .Generic
 	checkflag ENGINE_DANA_THURSDAY_NIGHT
 	iftrue .Generic
@@ -46,20 +46,20 @@ DanaPhoneCallerScript:
 .Generic:
 	farscall PhoneScript_Random3
 	ifequal 0, DanaFoundRare
-	farjump Phone_GenericCall_Female
+	farsjump Phone_GenericCall_Female
 
 DanaThursdayNight:
 	setflag ENGINE_DANA_THURSDAY_NIGHT
 
 DanaWantsBattle:
-	landmarktotext ROUTE_38, MEM_BUFFER_2
-	setflag ENGINE_DANA
-	farjump PhoneScript_WantsToBattle_Female
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_38
+	setflag ENGINE_DANA_READY_FOR_REMATCH
+	farsjump PhoneScript_WantsToBattle_Female
 
 DanaFoundRare:
-	farjump Phone_CheckIfUnseenRare_Female
+	farsjump Phone_CheckIfUnseenRare_Female
 
 DanaHasThunderstone:
 	setflag ENGINE_DANA_HAS_THUNDERSTONE
-	landmarktotext ROUTE_38, MEM_BUFFER_2
-	farjump PhoneScript_FoundItem_Female
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_38
+	farsjump PhoneScript_FoundItem_Female

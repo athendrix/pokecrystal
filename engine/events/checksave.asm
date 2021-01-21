@@ -1,6 +1,6 @@
 CheckSave::
-	ld a, BANK(sCheckValue1) ; BANK(sCheckValue2)
-	call GetSRAMBank
+	ld a, BANK(sCheckValue1) ; aka BANK(sCheckValue2)
+	call OpenSRAM
 	ld a, [sCheckValue1]
 	ld b, a
 	ld a, [sCheckValue2]

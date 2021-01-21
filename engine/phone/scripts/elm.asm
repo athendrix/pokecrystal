@@ -1,5 +1,5 @@
 ElmPhoneCalleeScript:
-	checkcode VAR_SPECIALPHONECALL
+	readvar VAR_SPECIALPHONECALL
 	ifequal SPECIALCALL_POKERUS, .pokerus
 	checkevent EVENT_SHOWED_TOGEPI_TO_ELM
 	iftrue .discovery
@@ -18,7 +18,7 @@ ElmPhoneCalleeScript:
 	iftrue .stolen
 	checkevent EVENT_GOT_MYSTERY_EGG_FROM_MR_POKEMON
 	iftrue .sawmrpokemon
-	farwritetext ElmPhoneStartText
+	farwritetext ElmPhoneHealYourMonText
 	end
 
 .sawmrpokemon
@@ -30,7 +30,7 @@ ElmPhoneCalleeScript:
 	end
 
 .checkingegg
-	farwritetext ElmPhoneCheckingEggText
+	farwritetext ElmPhoneCheckingTheEggText
 	end
 
 .assistant
@@ -38,7 +38,7 @@ ElmPhoneCalleeScript:
 	end
 
 .eggunhatched
-	farwritetext ElmPhoneEggUnhatchedText
+	farwritetext ElmPhoneHowIsTheEggText
 	end
 
 .egghatched
@@ -49,26 +49,26 @@ ElmPhoneCalleeScript:
 .discovery
 	random 2
 	ifequal 0, .nextdiscovery
-	farwritetext ElmPhoneDiscovery1Text
+	farwritetext ElmPhoneDiscoveredHatchTimeText
 	end
 
 .nextdiscovery
-	farwritetext ElmPhoneDiscovery2Text
+	farwritetext ElmPhoneInvestigatingEggMovesText
 	end
 
 .pokerus
-	farwritetext ElmPhonePokerusText
+	farwritetext ElmPhoneDiscoveredPokerusText
 	specialphonecall SPECIALCALL_NONE
 	end
 
 ElmPhoneCallerScript:
-	checkcode VAR_SPECIALPHONECALL
+	readvar VAR_SPECIALPHONECALL
 	ifequal SPECIALCALL_ROBBED, .disaster
 	ifequal SPECIALCALL_ASSISTANT, .assistant
 	ifequal SPECIALCALL_WEIRDBROADCAST, .rocket
 	ifequal SPECIALCALL_SSTICKET, .gift
 	ifequal SPECIALCALL_MASTERBALL, .gift
-	farwritetext ElmPhonePokerusText
+	farwritetext ElmPhoneDiscoveredPokerusText
 	specialphonecall SPECIALCALL_NONE
 	end
 
@@ -86,7 +86,7 @@ ElmPhoneCallerScript:
 	end
 
 .rocket
-	farwritetext ElmPhoneRocketText
+	farwritetext ElmPhoneRadioTowerRocketTakeoverText
 	specialphonecall SPECIALCALL_NONE
 	end
 
@@ -95,7 +95,7 @@ ElmPhoneCallerScript:
 	specialphonecall SPECIALCALL_NONE
 	end
 
-.unused
-	farwritetext ElmPhoneUnusedText
+.neat ; unreferenced
+	farwritetext ElmPhoneGotAholdOfSomethingNeatText
 	specialphonecall SPECIALCALL_NONE
 	end

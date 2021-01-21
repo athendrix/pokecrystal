@@ -4,7 +4,7 @@ DoPlayerMovement::
 	ld a, movement_step_sleep
 	ld [wMovementAnimation], a
 	xor a
-	ld [wd041], a
+	ld [wWalkingIntoEdgeWarp], a
 	call .TranslateIntoMovement
 	ld c, a
 	ld a, [wMovementAnimation]
@@ -98,7 +98,7 @@ DoPlayerMovement::
 	jr z, .Standing
 
 ; Walking into an edge warp won't bump.
-	ld a, [wEngineBuffer4]
+	ld a, [wWalkingIntoEdgeWarp]
 	and a
 	jr nz, .CantMove
 	call .BumpSound
@@ -120,7 +120,7 @@ DoPlayerMovement::
 	ld c, a
 	call CheckWhirlpoolTile
 	jr c, .not_whirlpool
-	ld a, 3
+	ld a, PLAYERMOVEMENT_FORCE_TURN
 	scf
 	ret
 
@@ -222,7 +222,7 @@ DoPlayerMovement::
 .continue_walk
 	ld a, STEP_WALK
 	call .DoStep
-	ld a, 5
+	ld a, PLAYERMOVEMENT_CONTINUE
 	scf
 	ret
 
@@ -247,7 +247,7 @@ DoPlayerMovement::
 
 	ld a, STEP_TURN
 	call .DoStep
-	ld a, 2
+	ld a, PLAYERMOVEMENT_TURN
 	scf
 	ret
 
@@ -311,7 +311,7 @@ DoPlayerMovement::
 	scf
 	ret
 
-; unused
+.unused ; unreferenced
 	xor a
 	ret
 
@@ -321,17 +321,17 @@ DoPlayerMovement::
 
 .TrySurf:
 	call .CheckSurfPerms
-	ld [wd040], a
+	ld [wWalkingIntoLand], a
 	jr c, .surf_bump
 
 	call .CheckNPC
-	ld [wd03f], a
+	ld [wWalkingIntoNPC], a
 	and a
 	jr z, .surf_bump
 	cp 2
 	jr z, .surf_bump
 
-	ld a, [wd040]
+	ld a, [wWalkingIntoLand]
 	and a
 	jr nz, .ExitWater
 
@@ -345,7 +345,7 @@ DoPlayerMovement::
 	call PlayMapMusic
 	ld a, STEP_WALK
 	call .DoStep
-	ld a, 6
+	ld a, PLAYERMOVEMENT_EXIT_WATER
 	scf
 	ret
 
@@ -364,7 +364,7 @@ DoPlayerMovement::
 	and 7
 	ld e, a
 	ld d, 0
-	ld hl, .data_8021e
+	ld hl, .ledge_table
 	add hl, de
 	ld a, [wFacingDirection]
 	and [hl]
@@ -374,7 +374,7 @@ DoPlayerMovement::
 	call PlaySFX
 	ld a, STEP_LEDGE
 	call .DoStep
-	ld a, 7
+	ld a, PLAYERMOVEMENT_JUMP
 	scf
 	ret
 
@@ -382,7 +382,7 @@ DoPlayerMovement::
 	xor a
 	ret
 
-.data_8021e
+.ledge_table
 	db FACE_RIGHT             ; COLL_HOP_RIGHT
 	db FACE_LEFT              ; COLL_HOP_LEFT
 	db FACE_UP                ; COLL_HOP_UP
@@ -395,7 +395,7 @@ DoPlayerMovement::
 .CheckWarp:
 ; Bug: Since no case is made for STANDING here, it will check
 ; [.edgewarps + $ff]. This resolves to $3e at $8035a.
-; This causes wd041 to be nonzero when standing on tile $3e,
+; This causes wWalkingIntoEdgeWarp to be nonzero when standing on tile $3e,
 ; making bumps silent.
 
 	ld a, [wWalkingDirection]
@@ -409,8 +409,8 @@ DoPlayerMovement::
 	cp [hl]
 	jr nz, .not_warp
 
-	ld a, 1
-	ld [wd041], a
+	ld a, TRUE
+	ld [wWalkingIntoEdgeWarp], a
 	ld a, [wWalkingDirection]
 	; This is in the wrong place.
 	cp STANDING
@@ -428,11 +428,11 @@ DoPlayerMovement::
 
 	call .StandInPlace
 	scf
-	ld a, 1
+	ld a, PLAYERMOVEMENT_WARP
 	ret
 
 .not_warp
-	xor a
+	xor a ; PLAYERMOVEMENT_NORMAL
 	ret
 
 .EdgeWarps:
@@ -465,7 +465,7 @@ DoPlayerMovement::
 	ld a, [hl]
 	ld [wPlayerTurningDirection], a
 
-	ld a, 4
+	ld a, PLAYERMOVEMENT_FINISH
 	ret
 
 .Steps:
@@ -577,11 +577,14 @@ DoPlayerMovement::
 ; Standing
 	jr .update
 
-.d_down 	add hl, de
-.d_up   	add hl, de
-.d_left 	add hl, de
-.d_right	add hl, de
-
+.d_down
+	add hl, de
+.d_up
+	add hl, de
+.d_left
+	add hl, de
+.d_right
+	add hl, de
 .update
 	ld a, [hli]
 	ld [wWalkingDirection], a
@@ -618,7 +621,7 @@ ENDM
 ; Returns 1 if there is no NPC in front
 ; Returns 2 if there is a movable NPC in front
 	ld a, 0
-	ldh [hMapObjectIndexBuffer], a
+	ldh [hMapObjectIndex], a
 ; Load the next X coordinate into d
 	ld a, [wPlayerStandingMapX]
 	ld d, a
@@ -738,7 +741,7 @@ ENDM
 ; Return 0 if tile a is land. Otherwise, return carry.
 
 	call GetTileCollision
-	and a ; LANDTILE?
+	and a ; LAND_TILE
 	ret z
 	scf
 	ret
@@ -748,11 +751,11 @@ ENDM
 ; Otherwise, return carry.
 
 	call GetTileCollision
-	cp WATERTILE
+	cp WATER_TILE
 	jr z, .Water
 
 ; Can walk back onto land from water.
-	and a ; LANDTILE?
+	and a ; LAND_TILE
 	jr z, .Land
 
 	jr .Neither
@@ -781,7 +784,7 @@ ENDM
 	push bc
 	ld a, PLAYER_NORMAL
 	ld [wPlayerState], a
-	call ReplaceKrisSprite ; UpdateSprites
+	call UpdatePlayerSprite ; UpdateSprites
 	pop bc
 	ret
 

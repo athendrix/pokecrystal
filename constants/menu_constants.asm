@@ -32,6 +32,11 @@
 	shift_const SCROLLINGMENU_ENABLE_START
 	shift_const SCROLLINGMENU_ENABLE_SELECT
 
+; ScrollingMenu items structure format
+	const_def 1
+	const SCROLLINGMENU_ITEMS_NORMAL
+	const SCROLLINGMENU_ITEMS_QUANTITY
+
 ; MonMenuOptions indexes (see data/mon_menu.asm)
 ; used by PokemonActionSubmenu (see engine/pokemon/mon_menu.asm)
 	const_def 1
@@ -82,7 +87,7 @@ HMENURETURN_ASM    EQU %11111111
 	const PARTYMENUACTION_GIVE_ITEM
 	const PARTYMENUACTION_MOBILE ; mobile
 ; PrintPartyMenuActionText arguments (see engine/pokemon/party_menu.asm)
-	const_def $f0
+	const_next $f0
 	const PARTYMENUTEXT_HEAL_PSN
 	const PARTYMENUTEXT_HEAL_BRN
 	const PARTYMENUTEXT_HEAL_FRZ

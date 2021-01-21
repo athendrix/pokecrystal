@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def
 	const ROUTE30_YOUNGSTER1
 	const ROUTE30_YOUNGSTER2
 	const ROUTE30_YOUNGSTER3
@@ -12,9 +12,9 @@
 	const ROUTE30_POKE_BALL
 
 Route30_MapScripts:
-	db 0 ; scene scripts
+	def_scene_scripts
 
-	db 0 ; callbacks
+	def_callbacks
 
 YoungsterJoey_ImportantBattleScript:
 	waitsfx
@@ -40,20 +40,20 @@ TrainerYoungsterJoey:
 	trainer YOUNGSTER, JOEY1, EVENT_BEAT_YOUNGSTER_JOEY, YoungsterJoey1SeenText, YoungsterJoey1BeatenText, 0, .Script
 
 .Script:
-	writecode VAR_CALLERID, PHONE_YOUNGSTER_JOEY
+	loadvar VAR_CALLERID, PHONE_YOUNGSTER_JOEY
 	endifjustbattled
 	opentext
-	checkflag ENGINE_JOEY
+	checkflag ENGINE_JOEY_READY_FOR_REMATCH
 	iftrue .Rematch
 	checkcellnum PHONE_YOUNGSTER_JOEY
 	iftrue .NumberAccepted
 	checkevent EVENT_JOEY_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskAgain
 	writetext YoungsterJoey1AfterText
-	buttonsound
+	promptbutton
 	setevent EVENT_JOEY_ASKED_FOR_PHONE_NUMBER
 	scall .AskNumber1
-	jump .RequestNumber
+	sjump .RequestNumber
 
 .AskAgain:
 	scall .AskNumber2
@@ -61,14 +61,14 @@ TrainerYoungsterJoey:
 	askforphonenumber PHONE_YOUNGSTER_JOEY
 	ifequal PHONE_CONTACTS_FULL, .PhoneFull
 	ifequal PHONE_CONTACT_REFUSED, .NumberDeclined
-	trainertotext YOUNGSTER, JOEY1, MEM_BUFFER_0
+	gettrainername STRING_BUFFER_3, YOUNGSTER, JOEY1
 	scall .RegisteredNumber
-	jump .NumberAccepted
+	sjump .NumberAccepted
 
 .Rematch:
 	scall .RematchStd
 	winlosstext YoungsterJoey1BeatenText, 0
-	copybytetovar wJoeyFightCount
+	readmem wJoeyFightCount
 	ifequal 4, .Fight4
 	ifequal 3, .Fight3
 	ifequal 2, .Fight2
@@ -90,39 +90,39 @@ TrainerYoungsterJoey:
 	loadtrainer YOUNGSTER, JOEY1
 	startbattle
 	reloadmapafterbattle
-	loadvar wJoeyFightCount, 1
-	clearflag ENGINE_JOEY
+	loadmem wJoeyFightCount, 1
+	clearflag ENGINE_JOEY_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
 	loadtrainer YOUNGSTER, JOEY2
 	startbattle
 	reloadmapafterbattle
-	loadvar wJoeyFightCount, 2
-	clearflag ENGINE_JOEY
+	loadmem wJoeyFightCount, 2
+	clearflag ENGINE_JOEY_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
 	loadtrainer YOUNGSTER, JOEY3
 	startbattle
 	reloadmapafterbattle
-	loadvar wJoeyFightCount, 3
-	clearflag ENGINE_JOEY
+	loadmem wJoeyFightCount, 3
+	clearflag ENGINE_JOEY_READY_FOR_REMATCH
 	end
 
 .LoadFight3:
 	loadtrainer YOUNGSTER, JOEY4
 	startbattle
 	reloadmapafterbattle
-	loadvar wJoeyFightCount, 4
-	clearflag ENGINE_JOEY
+	loadmem wJoeyFightCount, 4
+	clearflag ENGINE_JOEY_READY_FOR_REMATCH
 	end
 
 .LoadFight4:
 	loadtrainer YOUNGSTER, JOEY5
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_JOEY
+	clearflag ENGINE_JOEY_READY_FOR_REMATCH
 	checkevent EVENT_JOEY_HP_UP
 	iftrue .GiveHPUp
 	checkevent EVENT_GOT_HP_UP_FROM_JOEY
@@ -131,7 +131,7 @@ TrainerYoungsterJoey:
 	verbosegiveitem HP_UP
 	iffalse .PackFull
 	setevent EVENT_GOT_HP_UP_FROM_JOEY
-	jump .NumberAccepted
+	sjump .NumberAccepted
 
 .done
 	end
@@ -144,43 +144,43 @@ TrainerYoungsterJoey:
 	iffalse .PackFull
 	clearevent EVENT_JOEY_HP_UP
 	setevent EVENT_GOT_HP_UP_FROM_JOEY
-	jump .NumberAccepted
+	sjump .NumberAccepted
 
 .AskNumber1:
-	jumpstd asknumber1m
+	jumpstd AskNumber1MScript
 	end
 
 .AskNumber2:
-	jumpstd asknumber2m
+	jumpstd AskNumber2MScript
 	end
 
 .RegisteredNumber:
-	jumpstd registerednumberm
+	jumpstd RegisteredNumberMScript
 	end
 
 .NumberAccepted:
-	jumpstd numberacceptedm
+	jumpstd NumberAcceptedMScript
 	end
 
 .NumberDeclined:
-	jumpstd numberdeclinedm
+	jumpstd NumberDeclinedMScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullm
+	jumpstd PhoneFullMScript
 	end
 
 .RematchStd:
-	jumpstd rematchm
+	jumpstd RematchMScript
 	end
 
 .PackFull:
 	setevent EVENT_JOEY_HP_UP
-	jumpstd packfullm
+	jumpstd PackFullMScript
 	end
 
 .RematchGift:
-	jumpstd rematchgiftm
+	jumpstd RematchGiftMScript
 	end
 
 TrainerYoungsterMikey:
@@ -407,20 +407,20 @@ YoungsterJoeyText_GiveHPUpAfterBattle:
 Route30_MapEvents:
 	db 0, 0 ; filler
 
-	db 2 ; warp events
+	def_warp_events
 	warp_event  7, 39, ROUTE_30_BERRY_HOUSE, 1
 	warp_event 17,  5, MR_POKEMONS_HOUSE, 1
 
-	db 0 ; coord events
+	def_coord_events
 
-	db 5 ; bg events
+	def_bg_events
 	bg_event  9, 43, BGEVENT_READ, Route30Sign
 	bg_event 13, 29, BGEVENT_READ, MrPokemonsHouseDirectionsSign
 	bg_event 15,  5, BGEVENT_READ, MrPokemonsHouseSign
 	bg_event  3, 21, BGEVENT_READ, Route30TrainerTips
 	bg_event 14,  9, BGEVENT_ITEM, Route30HiddenPotion
 
-	db 11 ; object events
+	def_object_events
 	object_event  5, 26, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_SCRIPT, 0, YoungsterJoey_ImportantBattleScript, EVENT_ROUTE_30_BATTLE
 	object_event  2, 28, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 3, TrainerYoungsterJoey, EVENT_ROUTE_30_YOUNGSTER_JOEY
 	object_event  5, 23, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 1, TrainerYoungsterMikey, -1

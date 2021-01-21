@@ -1,27 +1,27 @@
 JoeyPhoneCalleeScript:
-	trainertotext YOUNGSTER, JOEY1, MEM_BUFFER_0
-	checkflag ENGINE_JOEY
+	gettrainername STRING_BUFFER_3, YOUNGSTER, JOEY1
+	checkflag ENGINE_JOEY_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	farscall PhoneScript_AnswerPhone_Male
 	checkflag ENGINE_JOEY_MONDAY_AFTERNOON
 	iftrue .NotMonday
-	checkcode VAR_WEEKDAY
+	readvar VAR_WEEKDAY
 	ifnotequal MONDAY, .NotMonday
 	checktime DAY
 	iftrue JoeyMondayAfternoon
 
 .NotMonday:
 	special RandomPhoneMon
-	farjump UnknownScript_0xa0930
+	farsjump JoeyHangUpScript
 
 .WantsBattle:
-	landmarktotext ROUTE_30, MEM_BUFFER_2
-	farjump UnknownScript_0xa0a4b
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_30
+	farsjump JoeyReminderScript
 
 JoeyPhoneCallerScript:
-	trainertotext YOUNGSTER, JOEY1, MEM_BUFFER_0
+	gettrainername STRING_BUFFER_3, YOUNGSTER, JOEY1
 	farscall PhoneScript_GreetPhone_Male
-	checkflag ENGINE_JOEY
+	checkflag ENGINE_JOEY_READY_FOR_REMATCH
 	iftrue .Generic
 	checkflag ENGINE_JOEY_MONDAY_AFTERNOON
 	iftrue .Generic
@@ -30,12 +30,12 @@ JoeyPhoneCallerScript:
 	ifequal 1, JoeyWantsBattle
 
 .Generic:
-	farjump Phone_GenericCall_Male
+	farsjump Phone_GenericCall_Male
 
 JoeyMondayAfternoon:
 	setflag ENGINE_JOEY_MONDAY_AFTERNOON
 
 JoeyWantsBattle:
-	landmarktotext ROUTE_30, MEM_BUFFER_2
-	setflag ENGINE_JOEY
-	farjump PhoneScript_WantsToBattle_Male
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_30
+	setflag ENGINE_JOEY_READY_FOR_REMATCH
+	farsjump PhoneScript_WantsToBattle_Male

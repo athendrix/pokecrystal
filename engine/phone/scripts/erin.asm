@@ -1,26 +1,26 @@
 ErinPhoneCalleeScript:
-	trainertotext PICNICKER, ERIN1, MEM_BUFFER_0
-	checkflag ENGINE_ERIN
+	gettrainername STRING_BUFFER_3, PICNICKER, ERIN1
+	checkflag ENGINE_ERIN_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	farscall PhoneScript_AnswerPhone_Female
 	checkflag ENGINE_ERIN_SATURDAY_NIGHT
 	iftrue .NotSaturday
-	checkcode VAR_WEEKDAY
+	readvar VAR_WEEKDAY
 	ifnotequal SATURDAY, .NotSaturday
 	checktime NITE
 	iftrue ErinSaturdayNight
 
 .NotSaturday:
-	farjump ErinWorkingHardScript
+	farsjump ErinWorkingHardScript
 
 .WantsBattle:
-	landmarktotext ROUTE_46, MEM_BUFFER_2
-	farjump ErinComeBattleScript
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_46
+	farsjump ErinComeBattleScript
 
 ErinPhoneCallerScript:
-	trainertotext PICNICKER, ERIN1, MEM_BUFFER_0
+	gettrainername STRING_BUFFER_3, PICNICKER, ERIN1
 	farscall PhoneScript_GreetPhone_Female
-	checkflag ENGINE_ERIN
+	checkflag ENGINE_ERIN_READY_FOR_REMATCH
 	iftrue .GenericCall
 	checkflag ENGINE_ERIN_SATURDAY_NIGHT
 	iftrue .GenericCall
@@ -29,12 +29,12 @@ ErinPhoneCallerScript:
 	ifequal 1, ErinWantsBattle
 
 .GenericCall:
-	farjump Phone_GenericCall_Female
+	farsjump Phone_GenericCall_Female
 
 ErinSaturdayNight:
 	setflag ENGINE_ERIN_SATURDAY_NIGHT
 
 ErinWantsBattle:
-	landmarktotext ROUTE_46, MEM_BUFFER_2
-	setflag ENGINE_ERIN
-	farjump PhoneScript_WantsToBattle_Female
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_46
+	setflag ENGINE_ERIN_READY_FOR_REMATCH
+	farsjump PhoneScript_WantsToBattle_Female

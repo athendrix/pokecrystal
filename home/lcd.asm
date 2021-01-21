@@ -1,12 +1,12 @@
 ; LCD handling
 
-Unreferenced_Function547::
+Function547:: ; unreferenced
 	ldh a, [hLCDCPointer]
 	cp LOW(rSCX)
 	ret nz
 	ld c, a
 	ld a, [wLYOverrides]
-	ld [$ff00+c], a
+	ldh [c], a
 	ret
 
 LCD::
@@ -15,7 +15,7 @@ LCD::
 	and a
 	jr z, .done
 
-; At this point it's assumed we're in WRAM bank 5!
+; At this point it's assumed we're in BANK(wLYOverrides)!
 	push bc
 	ldh a, [rLY]
 	ld c, a
@@ -25,7 +25,7 @@ LCD::
 	ldh a, [hLCDCPointer]
 	ld c, a
 	ld a, b
-	ld [$ff00+c], a
+	ldh [c], a
 	pop bc
 
 .done
@@ -46,7 +46,7 @@ DisableLCD::
 	ld b, a
 
 ; Disable VBlank
-	res 0, a ; vblank
+	res VBLANK, a
 	ldh [rIE], a
 
 .wait

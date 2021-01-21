@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def
 	const ILEXFOREST_FARFETCHD
 	const ILEXFOREST_YOUNGSTER1
 	const ILEXFOREST_BLACK_BELT
@@ -12,15 +12,15 @@
 	const ILEXFOREST_POKE_BALL4
 
 IlexForest_MapScripts:
-	db 0 ; scene scripts
+	def_scene_scripts
 
-	db 1 ; callbacks
+	def_callbacks
 	callback MAPCALLBACK_OBJECTS, .FarfetchdCallback
 
 .FarfetchdCallback:
 	checkevent EVENT_GOT_HM01_CUT
 	iftrue .Static
-	copybytetovar wFarfetchdPosition
+	readmem wFarfetchdPosition
 	ifequal  1, .PositionOne
 	ifequal  2, .PositionTwo
 	ifequal  3, .PositionThree
@@ -32,57 +32,57 @@ IlexForest_MapScripts:
 	ifequal  9, .PositionNine
 	ifequal 10, .PositionTen
 .Static:
-	return
+	endcallback
 
 .PositionOne:
 	moveobject ILEXFOREST_FARFETCHD, 14, 31
 	appear ILEXFOREST_FARFETCHD
-	return
+	endcallback
 
 .PositionTwo:
 	moveobject ILEXFOREST_FARFETCHD, 15, 25
 	appear ILEXFOREST_FARFETCHD
-	return
+	endcallback
 
 .PositionThree:
 	moveobject ILEXFOREST_FARFETCHD, 20, 24
 	appear ILEXFOREST_FARFETCHD
-	return
+	endcallback
 
 .PositionFour:
 	moveobject ILEXFOREST_FARFETCHD, 29, 22
 	appear ILEXFOREST_FARFETCHD
-	return
+	endcallback
 
 .PositionFive:
 	moveobject ILEXFOREST_FARFETCHD, 28, 31
 	appear ILEXFOREST_FARFETCHD
-	return
+	endcallback
 
 .PositionSix:
 	moveobject ILEXFOREST_FARFETCHD, 24, 35
 	appear ILEXFOREST_FARFETCHD
-	return
+	endcallback
 
 .PositionSeven:
 	moveobject ILEXFOREST_FARFETCHD, 22, 31
 	appear ILEXFOREST_FARFETCHD
-	return
+	endcallback
 
 .PositionEight:
 	moveobject ILEXFOREST_FARFETCHD, 15, 29
 	appear ILEXFOREST_FARFETCHD
-	return
+	endcallback
 
 .PositionNine:
 	moveobject ILEXFOREST_FARFETCHD, 10, 35
 	appear ILEXFOREST_FARFETCHD
-	return
+	endcallback
 
 .PositionTen:
 	moveobject ILEXFOREST_FARFETCHD, 6, 28
 	appear ILEXFOREST_FARFETCHD
-	return
+	endcallback
 
 IlexForestCharcoalApprenticeScript:
 	faceplayer
@@ -101,7 +101,7 @@ IlexForestCharcoalApprenticeScript:
 	end
 
 IlexForestFarfetchdScript:
-	copybytetovar wFarfetchdPosition
+	readmem wFarfetchdPosition
 	ifequal  1, .Position1
 	ifequal  2, .Position2
 	ifequal  3, .Position3
@@ -117,7 +117,7 @@ IlexForestFarfetchdScript:
 	faceplayer
 	opentext
 	writetext Text_ItsTheMissingPokemon
-	buttonsound
+	promptbutton
 	writetext Text_Kwaaaa
 	cry FARFETCH_D
 	waitbutton
@@ -126,7 +126,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 15, 25
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 2
+	loadmem wFarfetchdPosition, 2
 	end
 
 .Position2:
@@ -136,7 +136,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 20, 24
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 3
+	loadmem wFarfetchdPosition, 3
 	end
 
 .Position2_Down:
@@ -144,7 +144,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 15, 29
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 8
+	loadmem wFarfetchdPosition, 8
 	end
 
 .Position3:
@@ -154,7 +154,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 29, 22
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 4
+	loadmem wFarfetchdPosition, 4
 	end
 
 .Position3_Left:
@@ -162,7 +162,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 15, 25
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 2
+	loadmem wFarfetchdPosition, 2
 	end
 
 .Position4:
@@ -172,7 +172,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 28, 31
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 5
+	loadmem wFarfetchdPosition, 5
 	end
 
 .Position4_Up:
@@ -180,7 +180,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 20, 24
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 3
+	loadmem wFarfetchdPosition, 3
 	end
 
 .Position5:
@@ -192,7 +192,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 24, 35
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 6
+	loadmem wFarfetchdPosition, 6
 	end
 
 .Position5_Left:
@@ -200,7 +200,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 22, 31
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 7
+	loadmem wFarfetchdPosition, 7
 	end
 
 .Position5_Up:
@@ -208,7 +208,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 29, 22
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 4
+	loadmem wFarfetchdPosition, 4
 	end
 
 .Position5_Right:
@@ -216,7 +216,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 29, 22
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 4
+	loadmem wFarfetchdPosition, 4
 	end
 
 .Position6:
@@ -226,7 +226,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 22, 31
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 7
+	loadmem wFarfetchdPosition, 7
 	end
 
 .Position6_Right:
@@ -234,7 +234,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 28, 31
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 5
+	loadmem wFarfetchdPosition, 5
 	end
 
 .Position7:
@@ -245,7 +245,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 15, 29
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 8
+	loadmem wFarfetchdPosition, 8
 	end
 
 .Position7_Left:
@@ -253,7 +253,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 24, 35
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 6
+	loadmem wFarfetchdPosition, 6
 	end
 
 .Position7_Down:
@@ -261,7 +261,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 28, 31
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 5
+	loadmem wFarfetchdPosition, 5
 	end
 
 .Position8:
@@ -273,7 +273,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 10, 35
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 9
+	loadmem wFarfetchdPosition, 9
 	end
 
 .Position8_Right:
@@ -281,7 +281,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 22, 31
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 7
+	loadmem wFarfetchdPosition, 7
 	end
 
 .Position8_Up:
@@ -290,7 +290,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 15, 25
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 2
+	loadmem wFarfetchdPosition, 2
 	end
 
 .Position9:
@@ -301,7 +301,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 6, 28
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 10
+	loadmem wFarfetchdPosition, 10
 	appear ILEXFOREST_BLACK_BELT
 	setevent EVENT_CHARCOAL_KILN_BOSS
 	setevent EVENT_HERDED_FARFETCHD
@@ -312,7 +312,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 15, 29
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 8
+	loadmem wFarfetchdPosition, 8
 	end
 
 .Position9_Down:
@@ -320,7 +320,7 @@ IlexForestFarfetchdScript:
 	moveobject ILEXFOREST_FARFETCHD, 15, 29
 	disappear ILEXFOREST_FARFETCHD
 	appear ILEXFOREST_FARFETCHD
-	loadvar wFarfetchdPosition, 8
+	loadmem wFarfetchdPosition, 8
 	end
 
 .Position10:
@@ -339,7 +339,7 @@ IlexForestFarfetchdScript:
 	cry FARFETCH_D
 	waitbutton
 	closetext
-	checkcode VAR_FACING
+	readvar VAR_FACING
 	end
 
 IlexForestCharcoalMasterScript:
@@ -348,7 +348,7 @@ IlexForestCharcoalMasterScript:
 	checkevent EVENT_GOT_HM01_CUT
 	iftrue .AlreadyGotCut
 	writetext Text_CharcoalMasterIntro
-	buttonsound
+	promptbutton
 	verbosegiveitem HM_CUT
 	setevent EVENT_GOT_HM01_CUT
 	writetext Text_CharcoalMasterOutro
@@ -374,7 +374,7 @@ IlexForestHeadbuttGuyScript:
 	checkevent EVENT_GOT_TM02_HEADBUTT
 	iftrue .AlreadyGotHeadbutt
 	writetext Text_HeadbuttIntro
-	buttonsound
+	promptbutton
 	verbosegiveitem TM_HEADBUTT
 	iffalse .BagFull
 	setevent EVENT_GOT_TM02_HEADBUTT
@@ -420,9 +420,8 @@ IlexForestHiddenSuperPotion:
 IlexForestHiddenFullHeal:
 	hiddenitem FULL_HEAL, EVENT_ILEX_FOREST_HIDDEN_FULL_HEAL
 
-IlexForestBoulder:
-; unused
-	jumpstd strengthboulder
+IlexForestBoulder: ; unreferenced
+	jumpstd StrengthBoulderScript
 
 IlexForestSignpost:
 	jumptext IlexForestSignpostText
@@ -430,7 +429,7 @@ IlexForestSignpost:
 IlexForestShrineScript:
 	checkevent EVENT_FOREST_IS_RESTLESS
 	iftrue .ForestIsRestless
-	jump .DontDoCelebiEvent
+	sjump .DontDoCelebiEvent
 
 .ForestIsRestless:
 	checkitem GS_BALL
@@ -938,21 +937,21 @@ BugCatcherWayneAfterBattleText:
 IlexForest_MapEvents:
 	db 0, 0 ; filler
 
-	db 3 ; warp events
+	def_warp_events
 	warp_event  1,  5, ROUTE_34_ILEX_FOREST_GATE, 3
 	warp_event  3, 42, ILEX_FOREST_AZALEA_GATE, 1
 	warp_event  3, 43, ILEX_FOREST_AZALEA_GATE, 2
 
-	db 0 ; coord events
+	def_coord_events
 
-	db 5 ; bg events
+	def_bg_events
 	bg_event  3, 17, BGEVENT_READ, IlexForestSignpost
 	bg_event 11,  7, BGEVENT_ITEM, IlexForestHiddenEther
 	bg_event 22, 14, BGEVENT_ITEM, IlexForestHiddenSuperPotion
 	bg_event  1, 17, BGEVENT_ITEM, IlexForestHiddenFullHeal
 	bg_event  8, 22, BGEVENT_UP, IlexForestShrineScript
 
-	db 11 ; object events
+	def_object_events
 	object_event 14, 31, SPRITE_BIRD, SPRITEMOVEDATA_SPINRANDOM_SLOW, 0, 0, -1, -1, PAL_NPC_BROWN, OBJECTTYPE_SCRIPT, 0, IlexForestFarfetchdScript, EVENT_ILEX_FOREST_FARFETCHD
 	object_event  7, 28, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_GREEN, OBJECTTYPE_SCRIPT, 0, IlexForestCharcoalApprenticeScript, EVENT_ILEX_FOREST_APPRENTICE
 	object_event  5, 28, SPRITE_BLACK_BELT, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, IlexForestCharcoalMasterScript, EVENT_ILEX_FOREST_CHARCOAL_MASTER

@@ -1,6 +1,6 @@
 # Text Commands
 
-Defined in [macros/scripts/text.asm](/macros/scripts/text.asm) and [home/text.asm:TextCommands](/home/text.asm).
+Defined in [macros/scripts/text.asm](https://github.com/pret/pokecrystal/blob/master/macros/scripts/text.asm) and [home/text.asm:TextCommands](https://github.com/pret/pokecrystal/blob/master/home/text.asm).
 
 
 ## `$00`: `text_start`
@@ -35,7 +35,7 @@ Draw a box.
 Write text at (1, 16).
 
 
-## `$06`: `text_waitbutton`
+## `$06`: `text_promptbutton`
 
 Wait for button press; show arrow.
 
@@ -71,9 +71,9 @@ Play `SFX_DEX_FANFARE_50_79`.
 Print *n* `"…"`s, pausing for 10 frames after each; interrupt if A or B is pressed.
 
 
-## `$0D`: `text_linkwaitbutton`
+## `$0D`: `text_waitbutton`
 
-Wait for button press; show arrow.
+Wait for button press; don't show arrow.
 
 
 ## `$0E`: `sound_dex_fanfare_20_49`
@@ -108,7 +108,7 @@ Play `SFX_SLOT_MACHINE_START`.
 
 ## `$14`: <code>text_buffer <i>id</i></code>
 
-Write text from one of the following addresses (listed in [data/text_buffers.asm](/data/text_buffers.asm)):
+Write text from one of the following addresses (listed in [data/text_buffers.asm](https://github.com/pret/pokecrystal/blob/master/data/text_buffers.asm)):
 
 0. `StringBuffer3`
 1. `StringBuffer4`
