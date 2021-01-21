@@ -1,10 +1,10 @@
-	const_def 2 ; object constants
+	object_const_def
 	const WHIRLISLANDLUGIACHAMBER_LUGIA
 
 WhirlIslandLugiaChamber_MapScripts:
-	db 0 ; scene scripts
+	def_scene_scripts
 
-	db 1 ; callbacks
+	def_callbacks
 	callback MAPCALLBACK_OBJECTS, .Lugia
 
 .Lugia:
@@ -12,15 +12,15 @@ WhirlIslandLugiaChamber_MapScripts:
 	iftrue .NoAppear
 	checkitem SILVER_WING
 	iftrue .Appear
-	jump .NoAppear
+	sjump .NoAppear
 
 .Appear:
 	appear WHIRLISLANDLUGIACHAMBER_LUGIA
-	return
+	endcallback
 
 .NoAppear:
 	disappear WHIRLISLANDLUGIACHAMBER_LUGIA
-	return
+	endcallback
 
 Lugia:
 	faceplayer
@@ -30,7 +30,7 @@ Lugia:
 	pause 15
 	closetext
 	setevent EVENT_FOUGHT_LUGIA
-	writecode VAR_BATTLETYPE, BATTLETYPE_FORCEITEM
+	loadvar VAR_BATTLETYPE, BATTLETYPE_FORCEITEM
 	loadwildmon LUGIA, 60
 	startbattle
 	disappear WHIRLISLANDLUGIACHAMBER_LUGIA
@@ -44,12 +44,12 @@ LugiaText:
 WhirlIslandLugiaChamber_MapEvents:
 	db 0, 0 ; filler
 
-	db 1 ; warp events
+	def_warp_events
 	warp_event  9, 13, WHIRL_ISLAND_B2F, 3
 
-	db 0 ; coord events
+	def_coord_events
 
-	db 0 ; bg events
+	def_bg_events
 
-	db 1 ; object events
+	def_object_events
 	object_event  9,  5, SPRITE_LUGIA, SPRITEMOVEDATA_POKEMON, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_SCRIPT, 0, Lugia, EVENT_WHIRL_ISLAND_LUGIA_CHAMBER_LUGIA

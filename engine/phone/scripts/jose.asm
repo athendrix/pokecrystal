@@ -1,32 +1,32 @@
 JosePhoneCalleeScript:
-	trainertotext BIRD_KEEPER, JOSE2, MEM_BUFFER_0
-	checkflag ENGINE_JOSE
+	gettrainername STRING_BUFFER_3, BIRD_KEEPER, JOSE2
+	checkflag ENGINE_JOSE_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	farscall PhoneScript_AnswerPhone_Male
 	checkflag ENGINE_JOSE_SATURDAY_NIGHT
 	iftrue .NotSaturday
 	checkflag ENGINE_JOSE_HAS_STAR_PIECE
 	iftrue .HasItem
-	checkcode VAR_WEEKDAY
+	readvar VAR_WEEKDAY
 	ifnotequal SATURDAY, .NotSaturday
 	checktime NITE
 	iftrue JoseSaturdayNight
 
 .NotSaturday:
-	farjump UnknownScript_0xa0920
+	farsjump JoseHangUpScript
 
 .WantsBattle:
-	landmarktotext ROUTE_27, MEM_BUFFER_2
-	farjump UnknownScript_0xa0a41
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_27
+	farsjump JoseReminderScript
 
 .HasItem:
-	landmarktotext ROUTE_27, MEM_BUFFER_2
-	farjump UnknownScript_0xa0a41
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_27
+	farsjump JoseReminderScript
 
 JosePhoneCallerScript:
-	trainertotext BIRD_KEEPER, JOSE2, MEM_BUFFER_0
+	gettrainername STRING_BUFFER_3, BIRD_KEEPER, JOSE2
 	farscall PhoneScript_GreetPhone_Male
-	checkflag ENGINE_JOSE
+	checkflag ENGINE_JOSE_READY_FOR_REMATCH
 	iftrue .Generic
 	checkflag ENGINE_JOSE_SATURDAY_NIGHT
 	iftrue .Generic
@@ -40,20 +40,20 @@ JosePhoneCallerScript:
 .Generic:
 	farscall PhoneScript_Random3
 	ifequal 0, JoseFoundRare
-	farjump Phone_GenericCall_Male
+	farsjump Phone_GenericCall_Male
 
 JoseSaturdayNight:
 	setflag ENGINE_JOSE_SATURDAY_NIGHT
 
 JoseWantsBattle:
-	landmarktotext ROUTE_27, MEM_BUFFER_2
-	setflag ENGINE_JOSE
-	farjump PhoneScript_WantsToBattle_Male
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_27
+	setflag ENGINE_JOSE_READY_FOR_REMATCH
+	farsjump PhoneScript_WantsToBattle_Male
 
 JoseFoundRare:
-	farjump Phone_CheckIfUnseenRare_Male
+	farsjump Phone_CheckIfUnseenRare_Male
 
 JoseHasStarPiece:
 	setflag ENGINE_JOSE_HAS_STAR_PIECE
-	landmarktotext ROUTE_27, MEM_BUFFER_2
-	farjump PhoneScript_FoundItem_Male
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_27
+	farsjump PhoneScript_FoundItem_Male

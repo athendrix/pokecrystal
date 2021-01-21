@@ -1,28 +1,28 @@
 ChadPhoneCalleeScript:
-	trainertotext SCHOOLBOY, CHAD1, MEM_BUFFER_0
-	checkflag ENGINE_CHAD
+	gettrainername STRING_BUFFER_3, SCHOOLBOY, CHAD1
+	checkflag ENGINE_CHAD_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	farscall PhoneScript_AnswerPhone_Male
 	checkflag ENGINE_CHAD_FRIDAY_MORNING
 	iftrue .NotFriday
-	checkcode VAR_WEEKDAY
+	readvar VAR_WEEKDAY
 	ifnotequal FRIDAY, .NotFriday
 	checktime MORN
 	iftrue ChadFridayMorning
 
 .NotFriday:
-	farjump UnknownScript_0xa0980
+	farsjump ChadHangUpScript
 
 .WantsBattle:
-	landmarktotext ROUTE_38, MEM_BUFFER_2
-	farjump UnknownScript_0xa0a7d
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_38
+	farsjump ChadReminderScript
 
 ChadPhoneCallerScript:
-	trainertotext SCHOOLBOY, CHAD1, MEM_BUFFER_0
+	gettrainername STRING_BUFFER_3, SCHOOLBOY, CHAD1
 	farscall PhoneScript_GreetPhone_Male
 	farscall PhoneScript_Random2
 	ifequal 0, ChadOakGossip
-	checkflag ENGINE_CHAD
+	checkflag ENGINE_CHAD_READY_FOR_REMATCH
 	iftrue .Generic
 	checkflag ENGINE_CHAD_FRIDAY_MORNING
 	iftrue .Generic
@@ -32,18 +32,18 @@ ChadPhoneCallerScript:
 .Generic:
 	farscall PhoneScript_Random3
 	ifequal 0, ChadFoundRare
-	farjump Phone_GenericCall_Male
+	farsjump Phone_GenericCall_Male
 
 ChadFridayMorning:
 	setflag ENGINE_CHAD_FRIDAY_MORNING
 
 ChadWantsBattle:
-	landmarktotext ROUTE_38, MEM_BUFFER_2
-	setflag ENGINE_CHAD
-	farjump PhoneScript_WantsToBattle_Male
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_38
+	setflag ENGINE_CHAD_READY_FOR_REMATCH
+	farsjump PhoneScript_WantsToBattle_Male
 
 ChadFoundRare:
-	farjump Phone_CheckIfUnseenRare_Male
+	farsjump Phone_CheckIfUnseenRare_Male
 
 ChadOakGossip:
-	farjump ChadOakGossipScript
+	farsjump ChadOakGossipScript

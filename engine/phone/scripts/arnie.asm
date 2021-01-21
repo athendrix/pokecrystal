@@ -1,11 +1,11 @@
 ArniePhoneCalleeScript:
-	trainertotext BUG_CATCHER, ARNIE1, MEM_BUFFER_0
-	checkflag ENGINE_ARNIE
+	gettrainername STRING_BUFFER_3, BUG_CATCHER, ARNIE1
+	checkflag ENGINE_ARNIE_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	farscall PhoneScript_AnswerPhone_Male
 	checkflag ENGINE_ARNIE_TUESDAY_MORNING
 	iftrue .NotTuesday
-	checkcode VAR_WEEKDAY
+	readvar VAR_WEEKDAY
 	ifnotequal TUESDAY, .NotTuesday
 	checktime MORN
 	iftrue ArnieTuesdayMorning
@@ -13,20 +13,20 @@ ArniePhoneCalleeScript:
 .NotTuesday:
 	checkflag ENGINE_YANMA_SWARM
 	iftrue .AlreadySwarming
-	farjump UnknownScript_0xa0968
+	farsjump ArnieHangUpScript
 
 .WantsBattle:
-	landmarktotext ROUTE_35, MEM_BUFFER_2
-	farjump UnknownScript_0xa0a6e
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_35
+	farsjump ArnieReminderScript
 
 .AlreadySwarming:
-	landmarktotext ROUTE_35, MEM_BUFFER_2
-	farjump UnknownScript_0xa0aff
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_35
+	farsjump ArnieHurryScript
 
 ArniePhoneCallerScript:
-	trainertotext BUG_CATCHER, ARNIE1, MEM_BUFFER_0
+	gettrainername STRING_BUFFER_3, BUG_CATCHER, ARNIE1
 	farscall PhoneScript_GreetPhone_Male
-	checkflag ENGINE_ARNIE
+	checkflag ENGINE_ARNIE_READY_FOR_REMATCH
 	iftrue .Swarm
 	checkflag ENGINE_ARNIE_TUESDAY_MORNING
 	iftrue .Swarm
@@ -38,27 +38,27 @@ ArniePhoneCallerScript:
 	ifequal 0, ArnieYanmaSwarm
 	farscall PhoneScript_Random3
 	ifequal 0, ArnieFoundRare
-	farjump Phone_GenericCall_Male
+	farsjump Phone_GenericCall_Male
 
 ArnieTuesdayMorning:
 	setflag ENGINE_ARNIE_TUESDAY_MORNING
 
 ArnieWantsBattle:
-	landmarktotext ROUTE_35, MEM_BUFFER_2
-	setflag ENGINE_ARNIE
-	farjump PhoneScript_WantsToBattle_Male
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_35
+	setflag ENGINE_ARNIE_READY_FOR_REMATCH
+	farsjump PhoneScript_WantsToBattle_Male
 
 ArnieYanmaSwarm: ; start swarm
 	checkflag ENGINE_YANMA_SWARM
 	iftrue ArnieYanmaAlreadySwarming
 	setflag ENGINE_YANMA_SWARM
-	pokenamemem YANMA, MEM_BUFFER_1
+	getmonname STRING_BUFFER_4, YANMA
 	swarm SWARM_YANMA, ROUTE_35
-	landmarktotext ROUTE_35, MEM_BUFFER_2
-	farjump UnknownScript_0xa05ce
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_35
+	farsjump ArnieSwarmScript
 
 ArnieFoundRare:
-	farjump Phone_CheckIfUnseenRare_Male
+	farsjump Phone_CheckIfUnseenRare_Male
 
 ArnieYanmaAlreadySwarming:
-	farjump Phone_GenericCall_Male
+	farsjump Phone_GenericCall_Male

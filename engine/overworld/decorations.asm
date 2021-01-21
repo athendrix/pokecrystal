@@ -10,17 +10,17 @@ _PlayerDecorationMenu:
 	push af
 	ld hl, .MenuHeader
 	call LoadMenuHeader
-	xor a
-	ld [wBuffer5], a
-	ld a, $1
-	ld [wBuffer6], a
+	xor a ; FALSE
+	ld [wChangedDecorations], a
+	ld a, $1 ; bed
+	ld [wCurDecorationCategory], a
 .top_loop
-	ld a, [wBuffer6]
-	ld [wMenuCursorBuffer], a
+	ld a, [wCurDecorationCategory]
+	ld [wMenuCursorPosition], a
 	call .FindCategoriesWithOwnedDecos
 	call DoNthMenu
 	ld a, [wMenuCursorY]
-	ld [wBuffer6], a
+	ld [wCurDecorationCategory], a
 	jr c, .exit_menu
 	ld a, [wMenuSelection]
 	ld hl, .pointers
@@ -31,7 +31,7 @@ _PlayerDecorationMenu:
 	call ExitMenu
 	pop af
 	ld [wWhichIndexSet], a
-	ld a, [wBuffer5]
+	ld a, [wChangedDecorations]
 	ld c, a
 	ret
 
@@ -44,7 +44,7 @@ _PlayerDecorationMenu:
 .MenuData:
 	db STATICMENU_CURSOR | STATICMENU_WRAP ; flags
 	db 0 ; items
-	dw wd002
+	dw wNumOwnedDecoCategories
 	dw PlaceNthMenuStrings
 	dw .pointers
 
@@ -71,11 +71,11 @@ _PlayerDecorationMenu:
 	xor a
 	ld [wWhichIndexSet], a
 	call .ClearStringBuffer2
-	call .FindOwndDecos
+	call .FindOwnedDecos
 	ld a, 7
 	call .AppendToStringBuffer2
 	ld hl, wStringBuffer2
-	ld de, wd002
+	ld de, wDecoNameBuffer
 	ld bc, ITEM_NAME_LENGTH
 	call CopyBytes
 	ret
@@ -98,7 +98,7 @@ _PlayerDecorationMenu:
 	ld [hl], a
 	ret
 
-.FindOwndDecos:
+.FindOwnedDecos:
 	ld hl, .dw
 .loop
 	ld a, [hli]
@@ -133,10 +133,11 @@ _PlayerDecorationMenu:
 
 Deco_FillTempWithMinusOne:
 	xor a
-	ld hl, wd002
+	ld hl, wNumOwnedDecoCategories
 	ld [hli], a
+	assert wNumOwnedDecoCategories + 1 == wOwnedDecoCategories
 	ld a, -1
-	ld bc, $10
+	ld bc, 16
 	call ByteFill
 	ret
 
@@ -161,10 +162,11 @@ CheckAllDecorationFlags:
 	ret
 
 AppendDecoIndex:
-	ld hl, wd002
+	ld hl, wNumOwnedDecoCategories
 	inc [hl]
+	assert wNumOwnedDecoCategories + 1 == wOwnedDecoCategories
 	ld e, [hl]
-	ld d, $0
+	ld d, 0
 	add hl, de
 	ld [hl], a
 	ret
@@ -176,7 +178,7 @@ FindOwnedDecosInCategory:
 	pop hl
 	call CheckAllDecorationFlags
 	pop bc
-	ld a, [wd002]
+	ld a, [wNumOwnedDecoCategories]
 	and a
 	ret z
 
@@ -335,7 +337,7 @@ DecoExitMenu:
 	ret
 
 PopulateDecoCategoryMenu:
-	ld a, [wd002]
+	ld a, [wNumOwnedDecoCategories]
 	and a
 	jr z, .empty
 	cp 8
@@ -353,9 +355,10 @@ PopulateDecoCategoryMenu:
 	ret
 
 .beyond_eight
-	ld hl, wd002
+	ld hl, wNumOwnedDecoCategories
 	ld e, [hl]
 	dec [hl]
+	assert wNumOwnedDecoCategories + 1 == wOwnedDecoCategories
 	ld d, 0
 	add hl, de
 	ld [hl], -1
@@ -378,13 +381,12 @@ PopulateDecoCategoryMenu:
 	ret
 
 .empty
-	ld hl, .Text_nothing_to_choose
-	call MenuTextBoxBackup
+	ld hl, .NothingToChooseText
+	call MenuTextboxBackup
 	ret
 
-.Text_nothing_to_choose:
-	; There's nothing to choose.
-	text_far UnknownText_0x1bc471
+.NothingToChooseText:
+	text_far _NothingToChooseText
 	text_end
 
 .NonscrollingMenuHeader:
@@ -396,7 +398,7 @@ PopulateDecoCategoryMenu:
 .NonscrollingMenuData:
 	db STATICMENU_CURSOR | STATICMENU_WRAP ; flags
 	db 0 ; items
-	dw wd002
+	dw wDecoNameBuffer
 	dw DecorationMenuFunction
 	dw DecorationAttributes
 
@@ -409,11 +411,11 @@ PopulateDecoCategoryMenu:
 .ScrollingMenuData:
 	db SCROLLINGMENU_DISPLAY_ARROWS ; flags
 	db 8, 0 ; rows, columns
-	db 1 ; horizontal spacing
-	dbw 0, wd002 ; text pointer
+	db SCROLLINGMENU_ITEMS_NORMAL ; item format
+	dbw 0, wDecoNameBuffer ; text pointer
 	dba DecorationMenuFunction
-	dbw 0, 0
-	dbw 0, 0
+	dbw 0, NULL
+	dbw 0, NULL
 
 GetDecorationData:
 	ld hl, DecorationAttributes
@@ -550,7 +552,7 @@ GetDecoName:
 	ld a, e
 	jr .getpokename
 
-.unused
+.unused ; unreferenced
 	push de
 	call .getdeconame
 	pop de
@@ -559,7 +561,7 @@ GetDecoName:
 
 .getpokename
 	push bc
-	ld [wNamedObjectIndexBuffer], a
+	ld [wNamedObjectIndex], a
 	call GetPokemonName
 	pop bc
 	jr .copy
@@ -640,12 +642,12 @@ DecoAction_putawaybigdoll:
 
 DecoAction_TrySetItUp:
 	ld a, [hl]
-	ld [wBuffer1], a
+	ld [wCurDecoration], a
 	push hl
 	call DecoAction_SetItUp
 	jr c, .failed
-	ld a, 1
-	ld [wBuffer5], a
+	ld a, TRUE
+	ld [wChangedDecorations], a
 	pop hl
 	ld a, [wMenuSelection]
 	ld [hl], a
@@ -659,7 +661,7 @@ DecoAction_TrySetItUp:
 
 DecoAction_SetItUp:
 ; See if there's anything of the same type already out
-	ld a, [wBuffer1]
+	ld a, [wCurDecoration]
 	and a
 	jr z, .nothingthere
 ; See if that item is already out
@@ -671,11 +673,11 @@ DecoAction_SetItUp:
 	ld a, [wMenuSelection]
 	ld hl, wStringBuffer4
 	call GetDecorationName
-	ld a, [wBuffer1]
+	ld a, [wCurDecoration]
 	ld hl, wStringBuffer3
 	call GetDecorationName
-	ld hl, DecoText_PutAwayAndSetUp
-	call MenuTextBoxBackup
+	ld hl, PutAwayAndSetUpText
+	call MenuTextboxBackup
 	xor a
 	ret
 
@@ -683,52 +685,52 @@ DecoAction_SetItUp:
 	ld a, [wMenuSelection]
 	ld hl, wStringBuffer3
 	call GetDecorationName
-	ld hl, DecoText_SetUpTheDeco
-	call MenuTextBoxBackup
+	ld hl, SetUpTheDecoText
+	call MenuTextboxBackup
 	xor a
 	ret
 
 .alreadythere
-	ld hl, DecoText_AlreadySetUp
-	call MenuTextBoxBackup
+	ld hl, AlreadySetUpText
+	call MenuTextboxBackup
 	scf
 	ret
 
 DecoAction_TryPutItAway:
 ; If there is no item of that type already set, there is nothing to put away.
 	ld a, [hl]
-	ld [wBuffer1], a
+	ld [wCurDecoration], a
 	xor a
 	ld [hl], a
-	ld a, [wBuffer1]
+	ld a, [wCurDecoration]
 	and a
 	jr z, .nothingthere
 ; Put it away.
-	ld a, $1
-	ld [wBuffer5], a
-	ld a, [wBuffer1]
+	ld a, TRUE
+	ld [wChangedDecorations], a
+	ld a, [wCurDecoration]
 	ld [wMenuSelection], a
 	ld hl, wStringBuffer3
 	call GetDecorationName
-	ld hl, DecoText_PutAwayTheDeco
-	call MenuTextBoxBackup
+	ld hl, PutAwayTheDecoText
+	call MenuTextboxBackup
 	xor a
 	ret
 
 .nothingthere
-	ld hl, DecoText_NothingToPutAway
-	call MenuTextBoxBackup
+	ld hl, NothingToPutAwayText
+	call MenuTextboxBackup
 	xor a
 	ret
 
 DecoAction_setupornament:
-	ld hl, UnknownText_0x26e41
+	ld hl, WhichSidePutOnText
 	call DecoAction_AskWhichSide
 	jr c, .cancel
 	call DecoAction_SetItUp_Ornament
 	jr c, .cancel
-	ld a, $1
-	ld [wBuffer5], a
+	ld a, TRUE
+	ld [wChangedDecorations], a
 	jr DecoAction_FinishUp_Ornament
 
 .cancel
@@ -736,7 +738,7 @@ DecoAction_setupornament:
 	ret
 
 DecoAction_putawayornament:
-	ld hl, DecoText_WhichSide
+	ld hl, WhichSidePutAwayText
 	call DecoAction_AskWhichSide
 	jr nc, .incave
 	xor a
@@ -771,8 +773,8 @@ DecoAction_SetItUp_Ornament:
 	ld a, [wMenuSelection]
 	ld [wSelectedDecoration], a
 	call .getwhichside
-	ld hl, DecoText_PutAwayAndSetUp
-	call MenuTextBoxBackup
+	ld hl, PutAwayAndSetUpText
+	call MenuTextboxBackup
 	xor a
 	ret
 
@@ -783,14 +785,14 @@ DecoAction_SetItUp_Ornament:
 	ld a, [wMenuSelection]
 	ld hl, wStringBuffer3
 	call GetDecorationName
-	ld hl, DecoText_SetUpTheDeco
-	call MenuTextBoxBackup
+	ld hl, SetUpTheDecoText
+	call MenuTextboxBackup
 	xor a
 	ret
 
 .failed
-	ld hl, DecoText_AlreadySetUp
-	call MenuTextBoxBackup
+	ld hl, AlreadySetUpText
+	call MenuTextboxBackup
 	scf
 	ret
 
@@ -804,9 +806,8 @@ DecoAction_SetItUp_Ornament:
 	ld [wOtherDecoration], a
 	ret
 
-UnknownText_0x26e41:
-	; Which side do you want to put it on?
-	text_far UnknownText_0x1bc48c
+WhichSidePutOnText:
+	text_far _WhichSidePutOnText
 	text_end
 
 DecoAction_PutItAway_Ornament:
@@ -815,37 +816,36 @@ DecoAction_PutItAway_Ornament:
 	jr z, .nothingthere
 	ld hl, wStringBuffer3
 	call GetDecorationName
-	ld a, $1
-	ld [wBuffer5], a
+	ld a, TRUE
+	ld [wChangedDecorations], a
 	xor a
 	ld [wSelectedDecoration], a
-	ld hl, DecoText_PutAwayTheDeco
-	call MenuTextBoxBackup
+	ld hl, PutAwayTheDecoText
+	call MenuTextboxBackup
 	xor a
 	ret
 
 .nothingthere
-	ld hl, DecoText_NothingToPutAway
-	call MenuTextBoxBackup
+	ld hl, NothingToPutAwayText
+	call MenuTextboxBackup
 	xor a
 	ret
 
-DecoText_WhichSide:
-	; Which side do you want to put away?
-	text_far UnknownText_0x1bc4b2
+WhichSidePutAwayText:
+	text_far _WhichSidePutAwayText
 	text_end
 
 DecoAction_AskWhichSide:
-	call MenuTextBox
-	ld hl, MenuHeader_0x26eab
+	call MenuTextbox
+	ld hl, DecoSideMenuHeader
 	call GetMenu2
 	call ExitMenu
 	call CopyMenuData
 	jr c, .nope
 	ld a, [wMenuCursorY]
-	cp 3
+	cp 3 ; cancel
 	jr z, .nope
-	ld [wBuffer2], a
+	ld [wSelectedDecorationSide], a
 	call QueryWhichSide
 	ld a, [hl]
 	ld [wSelectedDecoration], a
@@ -861,51 +861,47 @@ DecoAction_AskWhichSide:
 QueryWhichSide:
 	ld hl, wDecoRightOrnament
 	ld de, wDecoLeftOrnament
-	ld a, [wBuffer2]
-	cp 1
+	ld a, [wSelectedDecorationSide]
+	cp 1 ; right side
 	ret z
+	; left side, swap hl and de
 	push hl
 	ld h, d
 	ld l, e
 	pop de
 	ret
 
-MenuHeader_0x26eab:
+DecoSideMenuHeader:
 	db MENU_BACKUP_TILES ; flags
 	menu_coords 0, 0, 13, 7
-	dw MenuData_0x26eb3
+	dw .MenuData
 	db 1 ; default option
 
-MenuData_0x26eb3:
+.MenuData:
 	db STATICMENU_CURSOR ; flags
 	db 3 ; items
 	db "RIGHT SIDE@"
 	db "LEFT SIDE@"
 	db "CANCEL@"
 
-DecoText_PutAwayTheDeco:
-	; Put away the @ .
-	text_far UnknownText_0x1bc4d7
+PutAwayTheDecoText:
+	text_far _PutAwayTheDecoText
 	text_end
 
-DecoText_NothingToPutAway:
-	; There's nothing to put away.
-	text_far UnknownText_0x1bc4ec
+NothingToPutAwayText:
+	text_far _NothingToPutAwayText
 	text_end
 
-DecoText_SetUpTheDeco:
-	; Set up the @ .
-	text_far UnknownText_0x1bc509
+SetUpTheDecoText:
+	text_far _SetUpTheDecoText
 	text_end
 
-DecoText_PutAwayAndSetUp:
-	; Put away the @ and set up the @ .
-	text_far UnknownText_0x1bc51c
+PutAwayAndSetUpText:
+	text_far _PutAwayAndSetUpText
 	text_end
 
-DecoText_AlreadySetUp:
-	; That's already set up.
-	text_far UnknownText_0x1bc546
+AlreadySetUpText:
+	text_far _AlreadySetUpText
 	text_end
 
 GetDecorationName_c_de:
@@ -947,7 +943,7 @@ GetDecorationID:
 	pop hl
 	ret
 
-SetAllDecorationFlags:
+SetAllDecorationFlags: ; unreferenced
 	ld hl, DecorationIDs
 .loop
 	ld a, [hli]
@@ -1005,39 +1001,35 @@ DecorationDesc_PosterPointers:
 
 DecorationDesc_TownMapPoster:
 	opentext
-	writetext .TownMapText
+	writetext .LookTownMapText
 	waitbutton
 	special OverworldTownMap
 	closetext
 	end
 
-.TownMapText:
-	; It's the TOWN MAP.
-	text_far UnknownText_0x1bc55d
+.LookTownMapText:
+	text_far _LookTownMapText
 	text_end
 
 DecorationDesc_PikachuPoster:
-	jumptext .PikaPosterText
+	jumptext .LookPikachuPosterText
 
-.PikaPosterText:
-	; It's a poster of a cute PIKACHU.
-	text_far UnknownText_0x1bc570
+.LookPikachuPosterText:
+	text_far _LookPikachuPosterText
 	text_end
 
 DecorationDesc_ClefairyPoster:
-	jumptext .ClefairyPosterText
+	jumptext .LookClefairyPosterText
 
-.ClefairyPosterText:
-	; It's a poster of a cute CLEFAIRY.
-	text_far UnknownText_0x1bc591
+.LookClefairyPosterText:
+	text_far _LookClefairyPosterText
 	text_end
 
 DecorationDesc_JigglypuffPoster:
-	jumptext .JigglypuffPosterText
+	jumptext .LookJigglypuffPosterText
 
-.JigglypuffPosterText:
-	; It's a poster of a cute JIGGLYPUFF.
-	text_far UnknownText_0x1bc5b3
+.LookJigglypuffPosterText:
+	text_far _LookJigglypuffPosterText
 	text_end
 
 DecorationDesc_NullPoster:
@@ -1064,11 +1056,10 @@ DecorationDesc_OrnamentOrConsole:
 	ret
 
 .OrnamentConsoleScript:
-	jumptext .OrnamentConsoleText
+	jumptext .LookAdorableDecoText
 
-.OrnamentConsoleText:
-	; It's an adorable @ .
-	text_far UnknownText_0x1bc5d7
+.LookAdorableDecoText:
+	text_far _LookAdorableDecoText
 	text_end
 
 DecorationDesc_GiantOrnament:
@@ -1077,11 +1068,10 @@ DecorationDesc_GiantOrnament:
 	ret
 
 .BigDollScript:
-	jumptext .BigDollText
+	jumptext .LookGiantDecoText
 
-.BigDollText:
-	; A giant doll! It's fluffy and cuddly.
-	text_far UnknownText_0x1bc5ef
+.LookGiantDecoText:
+	text_far _LookGiantDecoText
 	text_end
 
 ToggleMaptileDecorations:

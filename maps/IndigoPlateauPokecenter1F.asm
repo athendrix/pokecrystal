@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def
 	const INDIGOPLATEAUPOKECENTER1F_NURSE
 	const INDIGOPLATEAUPOKECENTER1F_CLERK
 	const INDIGOPLATEAUPOKECENTER1F_COOLTRAINER_M
@@ -7,10 +7,10 @@
 	const INDIGOPLATEAUPOKECENTER1F_ABRA
 
 IndigoPlateauPokecenter1F_MapScripts:
-	db 1 ; scene scripts
+	def_scene_scripts
 	scene_script .DummyScene ; SCENE_DEFAULT
 
-	db 1 ; callbacks
+	def_callbacks
 	callback MAPCALLBACK_NEWMAP, .PrepareElite4
 
 .DummyScene:
@@ -39,14 +39,14 @@ IndigoPlateauPokecenter1F_MapScripts:
 	clearevent EVENT_BEAT_ELITE_4_KAREN
 	clearevent EVENT_BEAT_CHAMPION_LANCE
 	setevent EVENT_LANCES_ROOM_OAK_AND_MARY
-	return
+	endcallback
 
 PlateauRivalBattle1:
 	checkevent EVENT_BEAT_RIVAL_IN_MT_MOON
 	iffalse PlateauRivalScriptDone
 	checkflag ENGINE_INDIGO_PLATEAU_RIVAL_FIGHT
 	iftrue PlateauRivalScriptDone
-	checkcode VAR_WEEKDAY
+	readvar VAR_WEEKDAY
 	ifequal SUNDAY, PlateauRivalScriptDone
 	ifequal TUESDAY, PlateauRivalScriptDone
 	ifequal THURSDAY, PlateauRivalScriptDone
@@ -61,14 +61,14 @@ PlateauRivalBattle1:
 	applymovement INDIGOPLATEAUPOKECENTER1F_SILVER, PlateauRivalMovement1
 	playmusic MUSIC_RIVAL_ENCOUNTER
 	turnobject PLAYER, RIGHT
-	jump PlateauRivalBattleCommon
+	sjump PlateauRivalBattleCommon
 
 PlateauRivalBattle2:
 	checkevent EVENT_BEAT_RIVAL_IN_MT_MOON
 	iffalse PlateauRivalScriptDone
 	checkflag ENGINE_INDIGO_PLATEAU_RIVAL_FIGHT
 	iftrue PlateauRivalScriptDone
-	checkcode VAR_WEEKDAY
+	readvar VAR_WEEKDAY
 	ifequal SUNDAY, PlateauRivalScriptDone
 	ifequal TUESDAY, PlateauRivalScriptDone
 	ifequal THURSDAY, PlateauRivalScriptDone
@@ -99,7 +99,7 @@ PlateauRivalBattleCommon:
 	startbattle
 	dontrestartmapmusic
 	reloadmapafterbattle
-	jump PlateauRivalPostBattle
+	sjump PlateauRivalPostBattle
 
 .Totodile:
 	winlosstext PlateauRivalWinText, PlateauRivalLoseText
@@ -108,7 +108,7 @@ PlateauRivalBattleCommon:
 	startbattle
 	dontrestartmapmusic
 	reloadmapafterbattle
-	jump PlateauRivalPostBattle
+	sjump PlateauRivalPostBattle
 
 .Chikorita:
 	winlosstext PlateauRivalWinText, PlateauRivalLoseText
@@ -117,7 +117,7 @@ PlateauRivalBattleCommon:
 	startbattle
 	dontrestartmapmusic
 	reloadmapafterbattle
-	jump PlateauRivalPostBattle
+	sjump PlateauRivalPostBattle
 
 PlateauRivalPostBattle:
 	playmusic MUSIC_RIVAL_AFTER
@@ -135,7 +135,7 @@ PlateauRivalScriptDone:
 	end
 
 IndigoPlateauPokecenter1FNurseScript:
-	jumpstd pokecenternurse
+	jumpstd PokecenterNurseScript
 
 IndigoPlateauPokecenter1FClerkScript:
 	opentext
@@ -303,19 +303,19 @@ AbraText:
 IndigoPlateauPokecenter1F_MapEvents:
 	db 0, 0 ; filler
 
-	db 4 ; warp events
+	def_warp_events
 	warp_event  5, 13, ROUTE_23, 1
 	warp_event  6, 13, ROUTE_23, 2
 	warp_event  0, 13, POKECENTER_2F, 1
 	warp_event 14,  3, WILLS_ROOM, 1
 
-	db 2 ; coord events
+	def_coord_events
 	coord_event 16,  4, SCENE_DEFAULT, PlateauRivalBattle1
 	coord_event 17,  4, SCENE_DEFAULT, PlateauRivalBattle2
 
-	db 0 ; bg events
+	def_bg_events
 
-	db 6 ; object events
+	def_object_events
 	object_event  3,  7, SPRITE_NURSE, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, IndigoPlateauPokecenter1FNurseScript, -1
 	object_event 11,  7, SPRITE_CLERK, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, IndigoPlateauPokecenter1FClerkScript, -1
 	object_event 11, 11, SPRITE_COOLTRAINER_M, SPRITEMOVEDATA_WANDER, 2, 2, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, IndigoPlateauPokecenter1FCooltrainerMScript, -1

@@ -2,12 +2,14 @@
 PLAYER      EQU  0
 LAST_TALKED EQU -2
 
-; memory constants
+; string buffer constants
 	const_def
-	const MEM_BUFFER_0 ; use wStringBuffer3
-	const MEM_BUFFER_1 ; use wStringBuffer4
-	const MEM_BUFFER_2 ; use wStringBuffer5
-NUM_MEM_BUFFERS EQU const_value
+	const STRING_BUFFER_3 ; use wStringBuffer3
+	const STRING_BUFFER_4 ; use wStringBuffer4
+	const STRING_BUFFER_5 ; use wStringBuffer5
+NUM_STRING_BUFFERS EQU const_value
+
+STRING_BUFFER_LENGTH EQU 19
 
 ; checkmoney/takemoney accounts
 	const_def
@@ -34,7 +36,13 @@ NUM_MEM_BUFFERS EQU const_value
 	const PHONE_CONTACTS_FULL   ; 1
 	const PHONE_CONTACT_REFUSED ; 2
 
-; writecode/checkcode arguments
+; trainertext arguments
+	const_def
+	const TRAINERTEXT_SEEN
+	const TRAINERTEXT_WIN
+	const TRAINERTEXT_LOSS
+
+; readvar/writevar/loadvar arguments
 ; _GetVarAction.VarActionTable indexes (see engine/overworld/variables.asm)
 	const_def
 	const VAR_STRINGBUFFER2    ; 00
@@ -86,6 +94,25 @@ RETVAR_EXECUTE EQU (2 << 6)
 	const PLAYEREVENT_JOYCHANGEFACING
 NUM_PLAYER_EVENTS EQU const_value
 
+; PlayerMovement.pointers indexes (see engine/overworld/events.asm)
+	const_def
+	const PLAYERMOVEMENT_NORMAL
+	const PLAYERMOVEMENT_WARP
+	const PLAYERMOVEMENT_TURN
+	const PLAYERMOVEMENT_FORCE_TURN
+	const PLAYERMOVEMENT_FINISH
+	const PLAYERMOVEMENT_CONTINUE
+	const PLAYERMOVEMENT_EXIT_WATER
+	const PLAYERMOVEMENT_JUMP
+
+; script data sizes (see macros/scripts/maps.asm)
+SCENE_SCRIPT_SIZE EQU 4 ; scene_script
+CALLBACK_SIZE     EQU 3 ; callback
+WARP_EVENT_SIZE   EQU 5 ; warp_event
+COORD_EVENT_SIZE  EQU 8 ; coord_event
+BG_EVENT_SIZE     EQU 5 ; bg_event
+OBJECT_EVENT_SIZE EQU 13 ; object_event
+
 ; bg_event types
 ; TryBGEvent arguments (see engine/overworld/events.asm)
 	const_def
@@ -113,6 +140,7 @@ NUM_PLAYER_EVENTS EQU const_value
 ; command queue members
 CMDQUEUE_TYPE  EQU 0
 CMDQUEUE_ADDR  EQU 1
+CMDQUEUE_02    EQU 2
 CMDQUEUE_03    EQU 3
 CMDQUEUE_04    EQU 4
 CMDQUEUE_05    EQU 5
@@ -122,7 +150,7 @@ CMDQUEUE_CAPACITY EQU 4
 ; HandleQueuedCommand.Jumptable indexes (see engine/overworld/events.asm)
 	const_def
 	const CMDQUEUE_NULL
-	const CMDQUEUE_NULL2
+	const CMDQUEUE_TYPE1
 	const CMDQUEUE_STONETABLE
 	const CMDQUEUE_TYPE3
 	const CMDQUEUE_TYPE4
@@ -163,7 +191,7 @@ NUM_CMDQUEUE_TYPES EQU const_value
 	const EMOTE_ROD ; 9
 	const EMOTE_BOULDER_DUST ; 10
 	const EMOTE_GRASS_RUSTLE ; 11
-EMOTE_MEM EQU -1
+EMOTE_FROM_MEM EQU -1
 
 ; fruittree arguments
 ; FruitTreeItems indexes (see data/items/fruit_trees.asm)
@@ -198,7 +226,7 @@ EMOTE_MEM EQU -1
 	const FRUITTREE_PEWTER_CITY_1 ; 1c
 	const FRUITTREE_PEWTER_CITY_2 ; 1d
 	const FRUITTREE_FUCHSIA_CITY  ; 1e
-NUM_FRUIT_TREES EQU const_value + -1
+NUM_FRUIT_TREES EQU const_value - 1
 
 ; describedecoration arguments
 ; DescribeDecoration.JumpTable indexes (see engine/overworld/decorations.asm)
@@ -215,7 +243,7 @@ NUM_FRUIT_TREES EQU const_value + -1
 	const SWARM_DUNSPARCE ; 0
 	const SWARM_YANMA     ; 1
 
-; ActivateFishingSwarm writebyte arguments
+; ActivateFishingSwarm setval arguments
 	const_def
 	const FISHSWARM_NONE     ; 0
 	const FISHSWARM_QWILFISH ; 1
@@ -248,14 +276,14 @@ NUM_FRUIT_TREES EQU const_value + -1
 	const BUGCONTEST_BOXED_MON  ; 1
 	const BUGCONTEST_NO_CATCH   ; 2
 
-; HealMachineAnim writebyte arguments
+; HealMachineAnim setval arguments
 ; HealMachineAnim.Pointers indexes (see engine/events/heal_machine_anim.asm)
 	const_def
 	const HEALMACHINE_POKECENTER   ; 0
 	const HEALMACHINE_ELMS_LAB     ; 1
 	const HEALMACHINE_HALL_OF_FAME ; 2
 
-; UnownPuzzle writebyte arguments
+; UnownPuzzle setval arguments
 ; LoadUnownPuzzlePiecesGFX.LZPointers indexes (see engine/games/unown_puzzle.asm)
 	const_def
 	const UNOWNPUZZLE_KABUTO     ; 0
@@ -264,7 +292,7 @@ NUM_FRUIT_TREES EQU const_value + -1
 	const UNOWNPUZZLE_HO_OH      ; 3
 NUM_UNOWN_PUZZLES EQU const_value
 
-; DisplayUnownWords writebyte arguments
+; DisplayUnownWords setval arguments
 ; UnownWalls and MenuHeaders_UnownWalls indexes (see data/events/unown_walls.asm)
 	const_def
 	const UNOWNWORDS_ESCAPE ; 0
@@ -272,7 +300,7 @@ NUM_UNOWN_PUZZLES EQU const_value
 	const UNOWNWORDS_WATER  ; 2
 	const UNOWNWORDS_HO_OH  ; 3
 
-; MoveTutor writebyte arguments
+; MoveTutor setval arguments
 	const_def 1
 	const MOVETUTOR_FLAMETHROWER ; 1
 	const MOVETUTOR_THUNDERBOLT  ; 2

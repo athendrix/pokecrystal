@@ -1,4 +1,4 @@
-	const_def 2 ; object constants
+	object_const_def
 	const ROUTE46_POKEFAN_M
 	const ROUTE46_YOUNGSTER
 	const ROUTE46_LASS
@@ -7,9 +7,9 @@
 	const ROUTE46_POKE_BALL
 
 Route46_MapScripts:
-	db 0 ; scene scripts
+	def_scene_scripts
 
-	db 0 ; callbacks
+	def_callbacks
 
 TrainerCamperTed:
 	trainer CAMPER, TED, EVENT_BEAT_CAMPER_TED, CamperTedSeenText, CamperTedBeatenText, 0, .Script
@@ -26,20 +26,20 @@ TrainerPicnickerErin1:
 	trainer PICNICKER, ERIN1, EVENT_BEAT_PICNICKER_ERIN, PicnickerErin1SeenText, PicnickerErin1BeatenText, 0, .Script
 
 .Script:
-	writecode VAR_CALLERID, PHONE_PICNICKER_ERIN
+	loadvar VAR_CALLERID, PHONE_PICNICKER_ERIN
 	endifjustbattled
 	opentext
-	checkflag ENGINE_ERIN
+	checkflag ENGINE_ERIN_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	checkcellnum PHONE_PICNICKER_ERIN
 	iftrue Route46NumberAcceptedF
 	checkevent EVENT_ERIN_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskedAlready
 	writetext PicnickerErinAfterBattleText
-	buttonsound
+	promptbutton
 	setevent EVENT_ERIN_ASKED_FOR_PHONE_NUMBER
 	scall Route46AskNumber1F
-	jump .AskForNumber
+	sjump .AskForNumber
 
 .AskedAlready:
 	scall Route46AskNumber2F
@@ -47,14 +47,14 @@ TrainerPicnickerErin1:
 	askforphonenumber PHONE_PICNICKER_ERIN
 	ifequal PHONE_CONTACTS_FULL, Route46PhoneFullF
 	ifequal PHONE_CONTACT_REFUSED, Route46NumberDeclinedF
-	trainertotext PICNICKER, ERIN1, MEM_BUFFER_0
+	gettrainername STRING_BUFFER_3, PICNICKER, ERIN1
 	scall Route46RegisteredNumberF
-	jump Route46NumberAcceptedF
+	sjump Route46NumberAcceptedF
 
 .WantsBattle:
 	scall Route46RematchF
 	winlosstext PicnickerErin1BeatenText, 0
-	copybytetovar wErinFightCount
+	readmem wErinFightCount
 	ifequal 2, .Fight2
 	ifequal 1, .Fight1
 	ifequal 0, .LoadFight0
@@ -68,23 +68,23 @@ TrainerPicnickerErin1:
 	loadtrainer PICNICKER, ERIN1
 	startbattle
 	reloadmapafterbattle
-	loadvar wErinFightCount, 1
-	clearflag ENGINE_ERIN
+	loadmem wErinFightCount, 1
+	clearflag ENGINE_ERIN_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
 	loadtrainer PICNICKER, ERIN2
 	startbattle
 	reloadmapafterbattle
-	loadvar wErinFightCount, 2
-	clearflag ENGINE_ERIN
+	loadmem wErinFightCount, 2
+	clearflag ENGINE_ERIN_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
 	loadtrainer PICNICKER, ERIN3
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_ERIN
+	clearflag ENGINE_ERIN_READY_FOR_REMATCH
 	checkevent EVENT_ERIN_CALCIUM
 	iftrue .HasCalcium
 	checkevent EVENT_GOT_CALCIUM_FROM_ERIN
@@ -93,7 +93,7 @@ TrainerPicnickerErin1:
 	verbosegiveitem CALCIUM
 	iffalse ErinNoRoomForCalcium
 	setevent EVENT_GOT_CALCIUM_FROM_ERIN
-	jump Route46NumberAcceptedF
+	sjump Route46NumberAcceptedF
 
 .GotCalciumAlready:
 	end
@@ -106,43 +106,43 @@ TrainerPicnickerErin1:
 	iffalse ErinNoRoomForCalcium
 	clearevent EVENT_ERIN_CALCIUM
 	setevent EVENT_GOT_CALCIUM_FROM_ERIN
-	jump Route46NumberAcceptedF
+	sjump Route46NumberAcceptedF
 
 Route46AskNumber1F:
-	jumpstd asknumber1f
+	jumpstd AskNumber1FScript
 	end
 
 Route46AskNumber2F:
-	jumpstd asknumber2f
+	jumpstd AskNumber2FScript
 	end
 
 Route46RegisteredNumberF:
-	jumpstd registerednumberf
+	jumpstd RegisteredNumberFScript
 	end
 
 Route46NumberAcceptedF:
-	jumpstd numberacceptedf
+	jumpstd NumberAcceptedFScript
 	end
 
 Route46NumberDeclinedF:
-	jumpstd numberdeclinedf
+	jumpstd NumberDeclinedFScript
 	end
 
 Route46PhoneFullF:
-	jumpstd phonefullf
+	jumpstd PhoneFullFScript
 	end
 
 Route46RematchF:
-	jumpstd rematchf
+	jumpstd RematchFScript
 	end
 
 ErinNoRoomForCalcium:
 	setevent EVENT_ERIN_CALCIUM
-	jumpstd packfullf
+	jumpstd PackFullFScript
 	end
 
 Route46RematchGiftF:
-	jumpstd rematchgiftf
+	jumpstd RematchGiftFScript
 	end
 
 TrainerHikerBailey:
@@ -251,17 +251,17 @@ Route46SignText:
 Route46_MapEvents:
 	db 0, 0 ; filler
 
-	db 3 ; warp events
+	def_warp_events
 	warp_event  7, 33, ROUTE_29_ROUTE_46_GATE, 1
 	warp_event  8, 33, ROUTE_29_ROUTE_46_GATE, 2
 	warp_event 14,  5, DARK_CAVE_VIOLET_ENTRANCE, 3
 
-	db 0 ; coord events
+	def_coord_events
 
-	db 1 ; bg events
+	def_bg_events
 	bg_event  9, 27, BGEVENT_READ, Route46Sign
 
-	db 6 ; object events
+	def_object_events
 	object_event 12, 19, SPRITE_POKEFAN_M, SPRITEMOVEDATA_STANDING_LEFT, 0, 0, -1, -1, PAL_NPC_BROWN, OBJECTTYPE_TRAINER, 2, TrainerHikerBailey, -1
 	object_event  4, 14, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, PAL_NPC_GREEN, OBJECTTYPE_TRAINER, 2, TrainerCamperTed, -1
 	object_event  2, 13, SPRITE_LASS, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_GREEN, OBJECTTYPE_TRAINER, 2, TrainerPicnickerErin1, -1

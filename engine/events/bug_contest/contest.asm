@@ -7,37 +7,35 @@ GiveParkBalls:
 	ret
 
 BugCatchingContestBattleScript::
-	writecode VAR_BATTLETYPE, BATTLETYPE_CONTEST
+	loadvar VAR_BATTLETYPE, BATTLETYPE_CONTEST
 	randomwildmon
 	startbattle
 	reloadmapafterbattle
-	copybytetovar wParkBallsRemaining
+	readmem wParkBallsRemaining
 	iffalse BugCatchingContestOutOfBallsScript
 	end
 
 BugCatchingContestOverScript::
 	playsound SFX_ELEVATOR_END
 	opentext
-	writetext BugCatchingContestText_BeeepTimesUp
+	writetext BugCatchingContestTimeUpText
 	waitbutton
-	jump BugCatchingContestReturnToGateScript
+	sjump BugCatchingContestReturnToGateScript
 
 BugCatchingContestOutOfBallsScript:
 	playsound SFX_ELEVATOR_END
 	opentext
-	writetext BugCatchingContestText_ContestIsOver
+	writetext BugCatchingContestIsOverText
 	waitbutton
 
 BugCatchingContestReturnToGateScript:
 	closetext
-	jumpstd bugcontestresultswarp
+	jumpstd BugContestResultsWarpScript
 
-BugCatchingContestText_BeeepTimesUp:
-	; ANNOUNCER: BEEEP! Time's up!
-	text_far UnknownText_0x1bd2ca
+BugCatchingContestTimeUpText:
+	text_far _BugCatchingContestTimeUpText
 	text_end
 
-BugCatchingContestText_ContestIsOver:
-	; ANNOUNCER: The Contest is over!
-	text_far UnknownText_0x1bd2e7
+BugCatchingContestIsOverText:
+	text_far _BugCatchingContestIsOverText
 	text_end

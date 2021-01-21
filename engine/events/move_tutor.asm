@@ -6,9 +6,9 @@ MoveTutor:
 	ld b, SCGB_PACKPALS
 	call GetSGBLayout
 	xor a
-	ld [wItemAttributeParamBuffer], a
+	ld [wItemAttributeValue], a
 	call .GetMoveTutorMove
-	ld [wNamedObjectIndexBuffer], a
+	ld [wNamedObjectIndex], a
 	ld [wPutativeTMHMMove], a
 	call GetMoveName
 	call CopyName1
@@ -40,15 +40,15 @@ MoveTutor:
 	cp MOVETUTOR_THUNDERBOLT
 	jr z, .thunderbolt
 	; MOVETUTOR_ICE_BEAM
-	ld a, ICE_BEAM
+	ld a, MT03_MOVE ; ICE_BEAM
 	ret
 
 .flamethrower
-	ld a, FLAMETHROWER
+	ld a, MT01_MOVE ; FLAMETHROWER
 	ret
 
 .thunderbolt
-	ld a, THUNDERBOLT
+	ld a, MT02_MOVE ; THUNDERBOLT
 	ret
 
 CheckCanLearnMoveTutorMove:
@@ -70,8 +70,8 @@ CheckCanLearnMoveTutorMove:
 	ld de, SFX_WRONG
 	call PlaySFX
 	pop de
-	ld a, BANK(Text_TMHMNotCompatible)
-	ld hl, Text_TMHMNotCompatible
+	ld a, BANK(TMHMNotCompatibleText)
+	ld hl, TMHMNotCompatibleText
 	call FarPrintText
 	jr .didnt_learn
 

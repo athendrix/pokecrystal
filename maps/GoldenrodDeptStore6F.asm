@@ -1,11 +1,15 @@
-	const_def 2 ; object constants
+GOLDENRODDEPTSTORE6F_FRESH_WATER_PRICE EQU 200
+GOLDENRODDEPTSTORE6F_SODA_POP_PRICE    EQU 300
+GOLDENRODDEPTSTORE6F_LEMONADE_PRICE    EQU 350
+
+	object_const_def
 	const GOLDENRODDEPTSTORE6F_LASS
 	const GOLDENRODDEPTSTORE6F_SUPER_NERD
 
 GoldenrodDeptStore6F_MapScripts:
-	db 0 ; scene scripts
+	def_scene_scripts
 
-	db 0 ; callbacks
+	def_callbacks
 
 GoldenrodVendingMachine:
 	opentext
@@ -22,49 +26,49 @@ GoldenrodVendingMachine:
 	end
 
 .FreshWater:
-	checkmoney YOUR_MONEY, 200
+	checkmoney YOUR_MONEY, GOLDENRODDEPTSTORE6F_FRESH_WATER_PRICE
 	ifequal HAVE_LESS, .NotEnoughMoney
 	giveitem FRESH_WATER
 	iffalse .NotEnoughSpace
-	takemoney YOUR_MONEY, 200
-	itemtotext FRESH_WATER, MEM_BUFFER_0
-	jump .VendItem
+	takemoney YOUR_MONEY, GOLDENRODDEPTSTORE6F_FRESH_WATER_PRICE
+	getitemname STRING_BUFFER_3, FRESH_WATER
+	sjump .VendItem
 
 .SodaPop:
-	checkmoney YOUR_MONEY, 300
+	checkmoney YOUR_MONEY, GOLDENRODDEPTSTORE6F_SODA_POP_PRICE
 	ifequal HAVE_LESS, .NotEnoughMoney
 	giveitem SODA_POP
 	iffalse .NotEnoughSpace
-	takemoney YOUR_MONEY, 300
-	itemtotext SODA_POP, MEM_BUFFER_0
-	jump .VendItem
+	takemoney YOUR_MONEY, GOLDENRODDEPTSTORE6F_SODA_POP_PRICE
+	getitemname STRING_BUFFER_3, SODA_POP
+	sjump .VendItem
 
 .Lemonade:
-	checkmoney YOUR_MONEY, 350
+	checkmoney YOUR_MONEY, GOLDENRODDEPTSTORE6F_LEMONADE_PRICE
 	ifequal HAVE_LESS, .NotEnoughMoney
 	giveitem LEMONADE
 	iffalse .NotEnoughSpace
-	takemoney YOUR_MONEY, 350
-	itemtotext LEMONADE, MEM_BUFFER_0
-	jump .VendItem
+	takemoney YOUR_MONEY, GOLDENRODDEPTSTORE6F_LEMONADE_PRICE
+	getitemname STRING_BUFFER_3, LEMONADE
+	sjump .VendItem
 
 .VendItem:
 	pause 10
 	playsound SFX_ENTER_DOOR
 	writetext GoldenrodClangText
-	buttonsound
+	promptbutton
 	itemnotify
-	jump .Start
+	sjump .Start
 
 .NotEnoughMoney:
 	writetext GoldenrodVendingNoMoneyText
 	waitbutton
-	jump .Start
+	sjump .Start
 
 .NotEnoughSpace:
 	writetext GoldenrodVendingNoSpaceText
 	waitbutton
-	jump .Start
+	sjump .Start
 
 .MenuHeader:
 	db MENU_BACKUP_TILES ; flags
@@ -90,7 +94,7 @@ GoldenrodDeptStore6FDirectory:
 	jumptext GoldenrodDeptStore6FDirectoryText
 
 GoldenrodDeptStore6FElevatorButton:
-	jumpstd elevatorbutton
+	jumpstd ElevatorButtonScript
 
 GoldenrodVendingText:
 	text "A vending machine!"
@@ -148,14 +152,14 @@ GoldenrodDeptStore6FDirectoryText:
 GoldenrodDeptStore6F_MapEvents:
 	db 0, 0 ; filler
 
-	db 3 ; warp events
+	def_warp_events
 	warp_event 15,  0, GOLDENROD_DEPT_STORE_5F, 2
 	warp_event  2,  0, GOLDENROD_DEPT_STORE_ELEVATOR, 1
 	warp_event 13,  0, GOLDENROD_DEPT_STORE_ROOF, 1
 
-	db 0 ; coord events
+	def_coord_events
 
-	db 6 ; bg events
+	def_bg_events
 	bg_event 14,  0, BGEVENT_READ, GoldenrodDeptStore6FDirectory
 	bg_event  3,  0, BGEVENT_READ, GoldenrodDeptStore6FElevatorButton
 	bg_event  8,  1, BGEVENT_UP, GoldenrodVendingMachine
@@ -163,6 +167,6 @@ GoldenrodDeptStore6F_MapEvents:
 	bg_event 10,  1, BGEVENT_UP, GoldenrodVendingMachine
 	bg_event 11,  1, BGEVENT_UP, GoldenrodVendingMachine
 
-	db 2 ; object events
+	def_object_events
 	object_event 10,  2, SPRITE_LASS, SPRITEMOVEDATA_WALK_LEFT_RIGHT, 1, 0, -1, -1, PAL_NPC_GREEN, OBJECTTYPE_SCRIPT, 0, GoldenrodDeptStore6FLassScript, -1
 	object_event  8,  2, SPRITE_SUPER_NERD, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, PAL_NPC_RED, OBJECTTYPE_SCRIPT, 0, GoldenrodDeptStore6FSuperNerdScript, -1

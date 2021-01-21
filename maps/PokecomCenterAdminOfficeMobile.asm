@@ -1,12 +1,12 @@
-	const_def 2 ; object constants
+	object_const_def
 	const POKECOMCENTERADMINOFFICEMOBILE_SCIENTIST1
 	const POKECOMCENTERADMINOFFICEMOBILE_SCIENTIST2
 	const POKECOMCENTERADMINOFFICEMOBILE_SCIENTIST3
 
 PokecomCenterAdminOfficeMobile_MapScripts:
-	db 0 ; scene scripts
+	def_scene_scripts
 
-	db 0 ; callbacks
+	def_callbacks
 
 PokecomCenterAdminOfficeMobileScientist1Script:
 	jumptextfaceplayer PokecomCenterAdminOfficeMobileScientist1Text
@@ -28,19 +28,19 @@ PokecomCenterAdminOfficeMobileComputer1:
 	closewindow
 	ifequal 1, .PokeComClub
 	ifequal 2, .MobileCenter
-	jump .Quit
+	sjump .Quit
 
 .PokeComClub:
 	opentext
 	writetext PokecomCenterAdminOfficeMobileComputer1Text_PokeComClub
 	waitbutton
-	jump .loop
+	sjump .loop
 
 .MobileCenter:
 	opentext
 	writetext PokecomCenterAdminOfficeMobileComputer1Text_MobileCenter
 	waitbutton
-	jump .loop
+	sjump .loop
 
 .Quit:
 	closetext
@@ -70,19 +70,19 @@ PokecomCenterAdminOfficeMobileComputer2:
 	closewindow
 	ifequal 1, .UsePhone
 	ifequal 2, .DontUsePhone
-	jump .Quit
+	sjump .Quit
 
 .UsePhone:
 	opentext
 	writetext PokecomCenterAdminOfficeMobileComputer2Text_UsePhone
 	waitbutton
-	jump .loop
+	sjump .loop
 
 .DontUsePhone:
 	opentext
 	writetext PokecomCenterAdminOfficeMobileComputer2Text_DontUsePhone
 	waitbutton
-	jump .loop
+	sjump .loop
 
 .Quit:
 	closetext
@@ -263,18 +263,18 @@ PokecomCenterAdminOfficeMobileComputer3Text:
 PokecomCenterAdminOfficeMobile_MapEvents:
 	db 0, 0 ; filler
 
-	db 2 ; warp events
+	def_warp_events
 	warp_event  0, 31, GOLDENROD_POKECENTER_1F, 3
 	warp_event  1, 31, GOLDENROD_POKECENTER_1F, 3
 
-	db 0 ; coord events
+	def_coord_events
 
-	db 3 ; bg events
+	def_bg_events
 	bg_event  6, 26, BGEVENT_UP, PokecomCenterAdminOfficeMobileComputer1
 	bg_event  6, 28, BGEVENT_UP, PokecomCenterAdminOfficeMobileComputer2
 	bg_event  3, 26, BGEVENT_UP, PokecomCenterAdminOfficeMobileComputer3
 
-	db 3 ; object events
+	def_object_events
 	object_event  4, 28, SPRITE_SCIENTIST, SPRITEMOVEDATA_WALK_UP_DOWN, 0, 1, -1, -1, PAL_NPC_RED, OBJECTTYPE_SCRIPT, 0, PokecomCenterAdminOfficeMobileScientist1Script, -1
 	object_event  7, 27, SPRITE_SCIENTIST, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_SCRIPT, 0, PokecomCenterAdminOfficeMobileScientist2Script, -1
 	object_event  7, 29, SPRITE_SCIENTIST, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, PAL_NPC_GREEN, OBJECTTYPE_SCRIPT, 0, PokecomCenterAdminOfficeMobileScientist3Script, -1

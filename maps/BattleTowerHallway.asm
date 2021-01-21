@@ -1,15 +1,15 @@
-	const_def 2 ; object constants
+	object_const_def
 	const BATTLETOWERHALLWAY_RECEPTIONIST
 
 BattleTowerHallway_MapScripts:
-	db 2 ; scene scripts
+	def_scene_scripts
 	scene_script .Scene0 ; SCENE_DEFAULT
 	scene_script .Scene1 ; SCENE_FINISHED
 
-	db 0 ; callbacks
+	def_callbacks
 
 .Scene0:
-	priorityjump .ChooseBattleRoom
+	prioritysjump .ChooseBattleRoom
 	setscene SCENE_FINISHED
 .Scene1:
 	end
@@ -17,7 +17,7 @@ BattleTowerHallway_MapScripts:
 .ChooseBattleRoom:
 	follow BATTLETOWERHALLWAY_RECEPTIONIST, PLAYER
 	callasm .asm_load_battle_room
-	jump .WalkToChosenBattleRoom
+	sjump .WalkToChosenBattleRoom
 
 .asm_load_battle_room
 	ldh a, [rSVBK]
@@ -45,23 +45,23 @@ BattleTowerHallway_MapScripts:
 	ifequal 9, .L90L100
 	ifequal 10, .L90L100
 	applymovement BATTLETOWERHALLWAY_RECEPTIONIST, MovementData_BattleTowerHallwayWalkTo1020Room
-	jump .EnterBattleRoom
+	sjump .EnterBattleRoom
 
 .L30L40:
 	applymovement BATTLETOWERHALLWAY_RECEPTIONIST, MovementData_BattleTowerHallwayWalkTo3040Room
-	jump .EnterBattleRoom
+	sjump .EnterBattleRoom
 
 .L50L60:
 	applymovement BATTLETOWERHALLWAY_RECEPTIONIST, MovementData_BattleTowerHallwayWalkTo5060Room
-	jump .EnterBattleRoom
+	sjump .EnterBattleRoom
 
 .L70L80:
 	applymovement BATTLETOWERHALLWAY_RECEPTIONIST, MovementData_BattleTowerHallwayWalkTo7080Room
-	jump .EnterBattleRoom
+	sjump .EnterBattleRoom
 
 .L90L100:
 	applymovement BATTLETOWERHALLWAY_RECEPTIONIST, MovementData_BattleTowerHallwayWalkTo90100Room
-	jump .EnterBattleRoom
+	sjump .EnterBattleRoom
 
 .EnterBattleRoom:
 	faceobject PLAYER, BATTLETOWERHALLWAY_RECEPTIONIST
@@ -77,7 +77,7 @@ BattleTowerHallway_MapScripts:
 BattleTowerHallway_MapEvents:
 	db 0, 0 ; filler
 
-	db 6 ; warp events
+	def_warp_events
 	warp_event 11,  1, BATTLE_TOWER_ELEVATOR, 1
 	warp_event  5,  0, BATTLE_TOWER_BATTLE_ROOM, 1
 	warp_event  7,  0, BATTLE_TOWER_BATTLE_ROOM, 1
@@ -85,9 +85,9 @@ BattleTowerHallway_MapEvents:
 	warp_event 13,  0, BATTLE_TOWER_BATTLE_ROOM, 1
 	warp_event 15,  0, BATTLE_TOWER_BATTLE_ROOM, 1
 
-	db 0 ; coord events
+	def_coord_events
 
-	db 0 ; bg events
+	def_bg_events
 
-	db 1 ; object events
+	def_object_events
 	object_event 11,  2, SPRITE_RECEPTIONIST, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, BattleTowerHallway_MapEvents, -1

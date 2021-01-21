@@ -17,11 +17,11 @@ MobileCheckOwnMonAnywhere:
 	ld bc, PARTYMON_STRUCT_LENGTH
 	add hl, bc
 	pop bc
-	call .CopyName
+	call .AdvanceOTName
 	dec d
 	jr nz, .asm_4a851
 	ld a, BANK(sBoxCount)
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [sBoxCount]
 	and a
 	jr z, .asm_4a888
@@ -39,7 +39,7 @@ MobileCheckOwnMonAnywhere:
 	ld bc, BOXMON_STRUCT_LENGTH
 	add hl, bc
 	pop bc
-	call .CopyName
+	call .AdvanceOTName
 	dec d
 	jr nz, .asm_4a873
 
@@ -57,7 +57,7 @@ MobileCheckOwnMonAnywhere:
 	add hl, bc
 	add hl, bc
 	ld a, [hli]
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -90,7 +90,7 @@ MobileCheckOwnMonAnywhere:
 	ld bc, BOXMON_STRUCT_LENGTH
 	add hl, bc
 	pop bc
-	call .CopyName
+	call .AdvanceOTName
 	dec d
 	jr nz, .asm_4a8ba
 	pop bc
@@ -146,7 +146,7 @@ MobileCheckOwnMonAnywhere:
 	dba sBox13
 	dba sBox14
 
-.CopyName:
+.AdvanceOTName:
 	push hl
 	ld hl, NAME_LENGTH
 	add hl, bc
@@ -158,7 +158,7 @@ MobileCheckOwnMonAnywhere:
 UnusedFindItemInPCOrBag:
 	ld a, [wScriptVar]
 	ld [wCurItem], a
-	ld hl, wPCItems
+	ld hl, wNumPCItems
 	call CheckItem
 	jr c, .found
 
@@ -235,13 +235,12 @@ Function4a94e:
 .asm_4a9b0
 	ld de, SFX_WRONG
 	call PlaySFX
-	ld hl, UnknownText_0x4a9be
+	ld hl, MobilePickThreeMonForBattle
 	call PrintText
 	jr .asm_4a974
 
-UnknownText_0x4a9be:
-	; Pick three #MON for battle.
-	text_far UnknownText_0x1c51d7
+MobilePickThreeMonForBattle:
+	text_far _MobilePickThreeMonForBattle
 	text_end
 
 Function4a9c3:
@@ -268,33 +267,32 @@ Function4a9d7:
 	call GetNick
 	ld h, d
 	ld l, e
-	ld de, wd006
-	ld bc, 6
+	ld de, wMobileParticipant1Nickname
+	ld bc, NAME_LENGTH_JAPANESE
 	call CopyBytes
 	ld a, [wd003]
 	ld hl, wPartyMonNicknames
 	call GetNick
 	ld h, d
 	ld l, e
-	ld de, wd00c
-	ld bc, 6
+	ld de, wMobileParticipant2Nickname
+	ld bc, NAME_LENGTH_JAPANESE
 	call CopyBytes
 	ld a, [wd004]
 	ld hl, wPartyMonNicknames
 	call GetNick
 	ld h, d
 	ld l, e
-	ld de, wd012
-	ld bc, 6
+	ld de, wMobileParticipant3Nickname
+	ld bc, NAME_LENGTH_JAPANESE
 	call CopyBytes
-	ld hl, UnknownText_0x4aa1d
+	ld hl, MobileUseTheseThreeMonText
 	call PrintText
 	call YesNoBox
 	ret
 
-UnknownText_0x4aa1d:
-	; , @  and @ . Use these three?
-	text_far UnknownText_0x1c51f4
+MobileUseTheseThreeMonText:
+	text_far _MobileUseTheseThreeMonText
 	text_end
 
 Function4aa22:
@@ -334,7 +332,7 @@ Function4aa34:
 	pop af
 	ret
 
-Function4aa6e:
+Function4aa6e: ; unreferenced
 	pop af
 	ld de, SFX_WRONG
 	call PlaySFX
@@ -424,15 +422,15 @@ Function4aad3:
 
 	ld c, a
 	xor a
-	ldh [hObjectStructIndexBuffer], a
+	ldh [hObjectStructIndex], a
 .loop
 	push bc
 	push hl
 	ld e, MONICON_PARTYMENU
 	farcall LoadMenuMonIcon
-	ldh a, [hObjectStructIndexBuffer]
+	ldh a, [hObjectStructIndex]
 	inc a
-	ldh [hObjectStructIndexBuffer], a
+	ldh [hObjectStructIndex], a
 	pop hl
 	pop bc
 	dec c
@@ -497,7 +495,7 @@ Function4ab1a:
 	dec a
 	ld [wCurPartyMon], a
 	ld c, a
-	ld b, $0
+	ld b, 0
 	ld hl, wPartySpecies
 	add hl, bc
 	ld a, [hl]
@@ -671,7 +669,7 @@ Function4ac58:
 	hlcoord 11, 13
 	ld b, $3
 	ld c, $7
-	call TextBox
+	call Textbox
 	hlcoord 13, 14
 	ld de, String_4ada7
 	call PlaceString
@@ -681,7 +679,7 @@ Function4ac58:
 	hlcoord 11, 9
 	ld b, $7
 	ld c, $7
-	call TextBox
+	call Textbox
 	call Function4ad68
 
 .asm_4ac96
@@ -721,7 +719,7 @@ Function4acaa:
 	ld a, $b
 	ld [wMenuBorderLeftCoord], a
 	ld a, $1
-	ld [wMenuCursorBuffer], a
+	ld [wMenuCursorPosition], a
 	call InitVerticalMenuCursor
 	ld hl, w2DMenuFlags1
 	set 6, [hl]
@@ -772,7 +770,7 @@ Function4ad17:
 	jr z, .asm_4ad39
 	ld de, SFX_WRONG
 	call WaitPlaySFX
-	ld hl, UnknownText_0x4ad51
+	ld hl, MobileOnlyThreeMonMayEnterText
 	call PrintText
 	ret
 
@@ -792,9 +790,8 @@ Function4ad17:
 	call Function4adc2
 	ret
 
-UnknownText_0x4ad51:
-	; Only three #MON may enter.
-	text_far UnknownText_0x1c521c
+MobileOnlyThreeMonMayEnterText:
+	text_far _MobileOnlyThreeMonMayEnterText
 	text_end
 
 Function4ad56:
@@ -806,7 +803,7 @@ Function4ad60:
 	farcall ManagePokemonMoves
 	ret
 
-Function4ad67:
+Function4ad67: ; unreferenced
 	ret
 
 Function4ad68:

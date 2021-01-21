@@ -1,13 +1,13 @@
 GinaPhoneCalleeScript:
-	trainertotext PICNICKER, GINA1, MEM_BUFFER_0
-	checkflag ENGINE_GINA
+	gettrainername STRING_BUFFER_3, PICNICKER, GINA1
+	checkflag ENGINE_GINA_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	farscall PhoneScript_AnswerPhone_Female
 	checkflag ENGINE_GINA_SUNDAY_AFTERNOON
 	iftrue .NotSunday
 	checkflag ENGINE_GINA_HAS_LEAF_STONE
 	iftrue .HasLeafStone
-	checkcode VAR_WEEKDAY
+	readvar VAR_WEEKDAY
 	ifnotequal SUNDAY, .NotSunday
 	checktime DAY
 	iftrue GinaSundayDay
@@ -15,25 +15,25 @@ GinaPhoneCalleeScript:
 .NotSunday:
 	checkflag ENGINE_ROCKETS_IN_RADIO_TOWER
 	iftrue .Rockets
-	farjump UnknownScript_0xa0960
+	farsjump GinaHangUpScript
 
 .Rockets:
-	farjump UnknownScript_0xa05c6
+	farsjump GinaRocketRumorScript
 
 .WantsBattle:
-	landmarktotext ROUTE_34, MEM_BUFFER_2
-	farjump UnknownScript_0xa0a69
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_34
+	farsjump GinaReminderScript
 
 .HasLeafStone:
-	landmarktotext ROUTE_34, MEM_BUFFER_2
-	farjump UnknownScript_0xa0abd
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_34
+	farsjump GinaComePickUpScript
 
 GinaPhoneCallerScript:
-	trainertotext PICNICKER, GINA1, MEM_BUFFER_0
+	gettrainername STRING_BUFFER_3, PICNICKER, GINA1
 	farscall PhoneScript_GreetPhone_Female
 	checkflag ENGINE_ROCKETS_IN_RADIO_TOWER
 	iftrue GinaRockets
-	checkflag ENGINE_GINA
+	checkflag ENGINE_GINA_READY_FOR_REMATCH
 	iftrue .Generic
 	checkflag ENGINE_GINA_SUNDAY_AFTERNOON
 	iftrue .Generic
@@ -53,20 +53,20 @@ GinaPhoneCallerScript:
 	ifequal 0, GinaWantsBattle
 
 .Generic:
-	farjump Phone_GenericCall_Female
+	farsjump Phone_GenericCall_Female
 
 GinaSundayDay:
 	setflag ENGINE_GINA_SUNDAY_AFTERNOON
 
 GinaWantsBattle:
-	landmarktotext ROUTE_34, MEM_BUFFER_2
-	setflag ENGINE_GINA
-	farjump PhoneScript_WantsToBattle_Female
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_34
+	setflag ENGINE_GINA_READY_FOR_REMATCH
+	farsjump PhoneScript_WantsToBattle_Female
 
 GinaRockets:
-	farjump UnknownScript_0xa05c6
+	farsjump GinaRocketRumorScript
 
 GinaHasLeafStone:
 	setflag ENGINE_GINA_HAS_LEAF_STONE
-	landmarktotext ROUTE_34, MEM_BUFFER_2
-	farjump PhoneScript_FoundItem_Female
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_34
+	farsjump PhoneScript_FoundItem_Female
